@@ -128,14 +128,13 @@ function GuidanceSearchBar() {
 
   return (
     <div ref={wrapperRef} className="w-full max-w-2xl mx-auto">
-      {/* Big input row */}
       <div className="flex items-center rounded-full overflow-hidden shadow-2xl border border-gold/20" style={{ background: "rgba(10,4,0,0.7)" }}>
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKey}
-          placeholder="Search a topic, chapter, or verse — karma, duty, grief, 2.47…"
+          placeholder="What troubles your heart today? / आपके मन में क्या है? / किं पृच्छसि"
           className="flex-1 bg-transparent text-parchment/90 placeholder-parchment/30 font-serif text-sm md:text-base px-6 py-4 outline-none min-w-0"
           aria-label="Seek guidance from the Bhagavad Gita"
           autoComplete="off"
@@ -144,16 +143,14 @@ function GuidanceSearchBar() {
           onClick={handleAsk}
           className="flex-shrink-0 flex items-center gap-2 bg-gradient-to-r from-saffron to-[#c47a1a] hover:brightness-110 text-dark-brown font-cinzel font-bold text-sm uppercase tracking-wider px-6 py-4 transition-all"
         >
-          <span>🪷</span> Explore
+          <span>🪷</span> Ask the Gita
         </button>
       </div>
 
-      {/* Support note */}
       <p className="text-parchment/35 text-xs font-serif italic text-center mt-3">
-        Search chapters, verses, and topics — in English or हिंदी
+        Supports English · हिंदी · संस्कृत — answers in your language
       </p>
 
-      {/* Suggestion chips */}
       <div className="flex flex-wrap justify-center gap-2 mt-5">
         {SUGGESTION_CHIPS.map((chip) => (
           <button
@@ -212,7 +209,6 @@ export default function Home() {
         className="relative min-h-screen flex flex-col items-center justify-center pt-16 pb-0 px-4 overflow-hidden"
         style={{ background: "linear-gradient(160deg, #1A0A02, #2E1408, #4A2010, #3A1A08)" }}
       >
-        {/* Concentric circle background decoration */}
         <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
           <div className="w-[90vw] max-w-[900px] aspect-square rounded-full border border-gold/10" />
           <div className="absolute w-[70vw] max-w-[700px] aspect-square rounded-full border border-gold/10" />
@@ -221,50 +217,42 @@ export default function Home() {
         </div>
 
         <div className="relative z-10 flex flex-col items-center text-center max-w-3xl mx-auto w-full">
-          {/* OM */}
           <div className="text-6xl md:text-8xl text-gold font-devanagari animate-[pulseGlow_4s_ease-in-out_infinite] leading-none mb-2">
             ॐ
           </div>
 
-          {/* Sanskrit title */}
           <div className="text-base md:text-lg text-saffron font-devanagari tracking-widest mb-2">
             श्रीमद्भगवद्गीता
           </div>
 
-          {/* Main title */}
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-cinzel text-white drop-shadow-lg tracking-tight mb-2">
             Srimad Bhagavad Gita
           </h1>
 
-          {/* Subtitle */}
           <p className="text-base md:text-lg text-gold italic font-serif opacity-90 mb-4">
             The Song of God · 5000 Years of Timeless Wisdom
           </p>
 
-          {/* Ornament divider */}
           <div className="flex items-center space-x-4 opacity-60 w-full max-w-xs mb-8">
             <div className="h-[1px] bg-gold flex-1" />
             <span className="text-gold text-lg">❀</span>
             <div className="h-[1px] bg-gold flex-1" />
           </div>
 
-          {/* Explore heading */}
           <div className="mb-1 flex items-center gap-3 justify-center">
             <span className="text-gold opacity-60 text-xs">✦</span>
             <span className="font-cinzel text-gold text-xs md:text-sm uppercase tracking-[0.22em]">
-              Explore the Sacred Gita
+              Seek Guidance from the Gita
             </span>
             <span className="text-gold opacity-60 text-xs">✦</span>
           </div>
           <p className="font-devanagari text-parchment/70 text-sm md:text-base mb-6">
-            गीता के अध्यायों और श्लोकों में अपना उत्तर खोजें
+            गीता से जीवन का उत्तर पाएं — Ask in English, हिंदी, or संस्कृत
           </p>
 
-          {/* Guidance search bar + chips */}
           <GuidanceSearchBar />
         </div>
 
-        {/* Stats row pinned to bottom of hero */}
         <div className="relative z-10 w-full mt-16 border-t border-gold/10 py-8">
           <div className="max-w-3xl mx-auto flex flex-wrap justify-center gap-x-12 gap-y-4">
             {[

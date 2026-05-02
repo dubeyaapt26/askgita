@@ -13,6 +13,7 @@ import TermsPage from "@/pages/TermsPage";
 import TopicsListPage from "@/pages/TopicsListPage";
 import TopicPage from "@/pages/TopicPage";
 import NotFound from "@/pages/not-found";
+import { FloatingChatbot } from "@/components/FloatingChatbot";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ function App() {
         <TooltipProvider>
           <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
             <Router />
+            <FloatingChatbot />
           </WouterRouter>
           <Toaster />
         </TooltipProvider>
