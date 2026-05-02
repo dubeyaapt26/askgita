@@ -135,7 +135,7 @@ function GuidanceSearchBar() {
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           onKeyDown={handleKey}
-          placeholder="What troubles your heart today? / आपके मन में क्या है? / किं पृच्छसि"
+          placeholder="Search a topic, chapter, or verse — karma, duty, grief, 2.47…"
           className="flex-1 bg-transparent text-parchment/90 placeholder-parchment/30 font-serif text-sm md:text-base px-6 py-4 outline-none min-w-0"
           aria-label="Seek guidance from the Bhagavad Gita"
           autoComplete="off"
@@ -144,13 +144,13 @@ function GuidanceSearchBar() {
           onClick={handleAsk}
           className="flex-shrink-0 flex items-center gap-2 bg-gradient-to-r from-saffron to-[#c47a1a] hover:brightness-110 text-dark-brown font-cinzel font-bold text-sm uppercase tracking-wider px-6 py-4 transition-all"
         >
-          <span>🪷</span> Ask the Gita
+          <span>🪷</span> Explore
         </button>
       </div>
 
       {/* Support note */}
       <p className="text-parchment/35 text-xs font-serif italic text-center mt-3">
-        Supports English · हिंदी · संस्कृत — answers in your language
+        Search chapters, verses, and topics — in English or हिंदी
       </p>
 
       {/* Suggestion chips */}
@@ -248,16 +248,16 @@ export default function Home() {
             <div className="h-[1px] bg-gold flex-1" />
           </div>
 
-          {/* Seek Guidance heading */}
+          {/* Explore heading */}
           <div className="mb-1 flex items-center gap-3 justify-center">
             <span className="text-gold opacity-60 text-xs">✦</span>
             <span className="font-cinzel text-gold text-xs md:text-sm uppercase tracking-[0.22em]">
-              Seek Guidance from the Gita
+              Explore the Sacred Gita
             </span>
             <span className="text-gold opacity-60 text-xs">✦</span>
           </div>
           <p className="font-devanagari text-parchment/70 text-sm md:text-base mb-6">
-            गीता से जीवन का उत्तर पाएं — Ask in English, हिंदी, or संस्कृत
+            गीता के अध्यायों और श्लोकों में अपना उत्तर खोजें
           </p>
 
           {/* Guidance search bar + chips */}
