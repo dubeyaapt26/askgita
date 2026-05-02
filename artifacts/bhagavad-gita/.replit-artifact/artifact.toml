@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Bhagavad Gita"
+version = "1.0.0"
+id = "artifacts/bhagavad-gita"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21912
+
+[services.development]
+run = "pnpm --filter @workspace/bhagavad-gita run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/bhagavad-gita", "run", "build" ]
+publicDir = "artifacts/bhagavad-gita/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21912"
+BASE_PATH = "/"

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Sitemap
+Sitemap: https://gita-reader--dubeyaapt.replit.app/sitemap.xml
+
+# Crawl-delay (be kind to the server)
+Crawl-delay: 1

@@ -14,3 +14,170 @@ import * as zod from "zod";
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
 });
+
+/**
+ * Ask a question and receive wisdom from the Bhagavad Gita, powered by AI
+ * @summary Ask the Gita Oracle
+ */
+export const AskGitaBody = zod.object({
+  question: zod.string().describe("The question to ask the Gita Oracle"),
+});
+
+export const AskGitaResponse = zod.object({
+  text: zod.string().describe("The wisdom response text"),
+  verse: zod
+    .object({
+      ref: zod.string().describe('e.g. "Chapter 2, Verse 47"'),
+      skt: zod.string().describe("Sanskrit shloka text"),
+    })
+    .nullish(),
+});
+
+/**
+ * Multi-turn chat with the Gita Oracle
+ * @summary Chat with the Gita
+ */
+export const ChatWithGitaBody = zod.object({
+  messages: zod
+    .array(
+      zod.object({
+        role: zod.enum(["user", "assistant"]),
+        content: zod.string(),
+      }),
+    )
+    .describe("Conversation history"),
+});
+
+export const ChatWithGitaResponse = zod.object({
+  text: zod.string().describe("The wisdom response text"),
+  verse: zod
+    .object({
+      ref: zod.string().describe('e.g. "Chapter 2, Verse 47"'),
+      skt: zod.string().describe("Sanskrit shloka text"),
+    })
+    .nullish(),
+});
+
+/**
+ * Returns summary information for all 18 chapters of the Bhagavad Gita
+ * @summary Get all 18 chapters
+ */
+export const GetChaptersResponse = zod.object({
+  chapters: zod.array(
+    zod.object({
+      id: zod.number(),
+      name: zod.string().describe("English name of the chapter"),
+      skt: zod.string().describe("Sanskrit name in Devanagari"),
+      meaning: zod.string().describe("English meaning of the Sanskrit name"),
+      totalVerses: zod.number(),
+      summary: zod.string(),
+      themes: zod.array(zod.string()),
+      keyVerseRef: zod.string(),
+    }),
+  ),
+});
+
+/**
+ * Returns full chapter detail including list of verse summaries
+ * @summary Get a chapter with verse list
+ */
+export const getChapterPathChapterIdMax = 18;
+
+export const GetChapterParams = zod.object({
+  chapterId: zod.coerce.number().min(1).max(getChapterPathChapterIdMax),
+});
+
+export const GetChapterResponse = zod.object({
+  id: zod.number(),
+  name: zod.string(),
+  skt: zod.string(),
+  meaning: zod.string(),
+  totalVerses: zod.number(),
+  summary: zod.string(),
+  longSummary: zod.string(),
+  themes: zod.array(zod.string()),
+  keyVerseRef: zod.string(),
+  setting: zod.string(),
+  verses: zod.array(
+    zod.object({
+      id: zod.number(),
+      chapterId: zod.number(),
+      skt: zod.string().describe("First line of Sanskrit verse"),
+      iast: zod.string().describe("Roman transliteration (first line)"),
+      english: zod.string().describe("Short English translation"),
+      theme: zod.string(),
+    }),
+  ),
+});
+
+/**
+ * Returns complete verse information including Sanskrit, transliteration, Hindi/English meanings, word-by-word breakdown, and detailed explanation. AI-generated and cached if not pre-built.
+ * @summary Get a single verse with full detail
+ */
+export const getVersePathChapterIdMax = 18;
+
+export const GetVerseParams = zod.object({
+  chapterId: zod.coerce.number().min(1).max(getVersePathChapterIdMax),
+  verseId: zod.coerce.number().min(1),
+});
+
+export const GetVerseResponse = zod.object({
+  id: zod.number().describe("Verse number within the chapter"),
+  chapterId: zod.number(),
+  chapterName: zod.string(),
+  skt: zod.string().describe("Full Sanskrit verse in Devanagari"),
+  iast: zod.string().describe("Full Roman transliteration"),
+  hindi: zod.string().describe("Hindi translation"),
+  english: zod.string().describe("English translation"),
+  wordByWord: zod.array(
+    zod.object({
+      word: zod.string().describe("Sanskrit word in Devanagari"),
+      iast: zod.string().describe("Roman transliteration"),
+      hindi: zod.string().describe("Hindi meaning"),
+      english: zod.string().describe("English meaning"),
+    }),
+  ),
+  explanation: zod
+    .string()
+    .describe("Detailed explanation (Gita Press style) in Hindi"),
+  gitaPressNote: zod.string().describe("Gita Press specific commentary note"),
+  modernRelevance: zod
+    .string()
+    .describe("Modern day relevance and application"),
+  themes: zod.array(zod.string()),
+  prevVerse: zod
+    .number()
+    .nullish()
+    .describe("Previous verse number, null if first"),
+  nextVerse: zod.number().nullish().describe("Next verse number, null if last"),
+  isAiGenerated: zod
+    .boolean()
+    .describe("Whether this detail was AI-generated (vs pre-built)"),
+});
+
+/**
+ * Get a detailed word-by-word and contextual explanation of a specific line from a Gita verse in Hindi and English
+ * @summary Explain a specific line of a verse
+ */
+export const ExplainVerseLineBody = zod.object({
+  chapterId: zod.number(),
+  verseId: zod.number(),
+  line: zod.string().describe("The specific Sanskrit line to explain"),
+  context: zod.string().optional().describe("Optional full verse context"),
+});
+
+export const ExplainVerseLineResponse = zod.object({
+  line: zod.string(),
+  hindi: zod.string().describe("Hindi explanation of this line"),
+  english: zod.string().describe("English explanation of this line"),
+  wordBreakdown: zod
+    .array(
+      zod.object({
+        word: zod.string().describe("Sanskrit word in Devanagari"),
+        iast: zod.string().describe("Roman transliteration"),
+        hindi: zod.string().describe("Hindi meaning"),
+        english: zod.string().describe("English meaning"),
+      }),
+    )
+    .describe("Word-by-word breakdown of this specific line"),
+});
