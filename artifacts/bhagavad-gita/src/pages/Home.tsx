@@ -95,13 +95,52 @@ export default function Home() {
     { name: "Ask Gita 🪷", href: "#ask" },
   ];
 
-  const homeSeo = {
-    "@context": "https://schema.org",
-    "@type": "WebPage",
-    "name": "AskGita.net — Bhagavad Gita All 18 Chapters & 700 Shlokas",
-    "url": "https://askgita.net",
-    "breadcrumb": { "@type": "BreadcrumbList", "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Home", "item": "https://askgita.net" }] }
-  };
+  const homeSeo = [
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "AskGita.net — Bhagavad Gita",
+      "alternateName": "Bhagavad Gita in Sanskrit, Hindi & English",
+      "url": "https://askgita.net",
+      "description": "Read the complete Bhagavad Gita — all 18 chapters and 700 shlokas in Sanskrit, Hindi, and English with AI-powered commentary.",
+      "inLanguage": ["en", "hi", "sa"],
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": {
+          "@type": "EntryPoint",
+          "urlTemplate": "https://askgita.net/?q={search_term_string}"
+        },
+        "query-input": "required name=search_term_string"
+      }
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "Book",
+      "name": "Bhagavad Gita",
+      "alternateName": ["भगवद्गीता", "Srimad Bhagavad Gita", "Shrimad Bhagwat Geeta", "Gita"],
+      "url": "https://askgita.net",
+      "author": { "@type": "Person", "name": "Veda Vyasa" },
+      "inLanguage": ["en", "hi", "sa"],
+      "numberOfPages": 700,
+      "genre": "Spiritual, Philosophy, Hindu Scripture",
+      "description": "The Bhagavad Gita is a 700-verse Hindu scripture that is part of the epic Mahabharata, consisting of a conversation between Prince Arjuna and Lord Krishna on duty, action, devotion, and self-knowledge.",
+      "publisher": { "@type": "Organization", "name": "Gita Press Gorakhpur" },
+      "workExample": [
+        { "@type": "Book", "name": "Bhagavad Gita Chapter 2: Transcendent Knowledge", "url": "https://askgita.net/chapter/2" },
+        { "@type": "Book", "name": "Bhagavad Gita Chapter 18: Liberation & Renunciation", "url": "https://askgita.net/chapter/18" }
+      ]
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      "name": "AskGita.net — Bhagavad Gita All 18 Chapters & 700 Shlokas",
+      "url": "https://askgita.net",
+      "breadcrumb": {
+        "@type": "BreadcrumbList",
+        "itemListElement": [{ "@type": "ListItem", "position": 1, "name": "Home", "item": "https://askgita.net" }]
+      }
+    }
+  ];
 
   return (
     <div className="min-h-screen bg-cream text-text-dark font-sans selection:bg-gold selection:text-dark-brown pb-16 lg:pb-0">

@@ -1,6 +1,33 @@
 import { Link } from "wouter";
-import { SEOHead } from "@/components/SEOHead";
+import { SEOHead, DOMAIN } from "@/components/SEOHead";
 import { Footer } from "@/components/Footer";
+
+const aboutJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": DOMAIN },
+      { "@type": "ListItem", "position": 2, "name": "About Us", "item": `${DOMAIN}/about` },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "AboutPage",
+    "name": "About AskGita.net — Bhagavad Gita Sacred Wisdom",
+    "description": "AskGita.net is dedicated to making the timeless wisdom of the Bhagavad Gita accessible to everyone in Sanskrit, Hindi, and English with AI-powered commentary.",
+    "url": `${DOMAIN}/about`,
+    "isPartOf": { "@type": "WebSite", "name": "AskGita.net", "url": DOMAIN },
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "AskGita.net",
+    "url": DOMAIN,
+    "description": "A platform dedicated to making the Bhagavad Gita accessible through Sanskrit, Hindi, and English translations with AI-powered commentary.",
+    "sameAs": [],
+  },
+];
 
 export default function AboutPage() {
   return (
@@ -10,6 +37,7 @@ export default function AboutPage() {
         description="Learn about our mission to make the timeless wisdom of the Bhagavad Gita accessible to everyone in Sanskrit, Hindi, and English with AI-powered commentary."
         canonical="/about"
         keywords="about bhagavad gita, gita wisdom, sacred texts, bhagavad gita in hindi english, gita press commentary"
+        jsonLd={aboutJsonLd}
       />
 
       {/* Nav */}

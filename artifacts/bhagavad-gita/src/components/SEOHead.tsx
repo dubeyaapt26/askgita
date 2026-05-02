@@ -8,11 +8,12 @@ interface SEOHeadProps {
   keywords?: string;
   jsonLd?: object | object[];
   type?: "website" | "article";
+  noIndex?: boolean;
 }
 
-const DOMAIN = "https://gita-reader--dubeyaapt.replit.app";
+export const DOMAIN = "https://askgita.net";
 const DEFAULT_IMAGE = `${DOMAIN}/opengraph.jpg`;
-const SITE_NAME = "Bhagavad Gita — Sacred Wisdom";
+const SITE_NAME = "AskGita.net — Bhagavad Gita";
 
 export function SEOHead({
   title,
@@ -22,6 +23,7 @@ export function SEOHead({
   keywords,
   jsonLd,
   type = "website",
+  noIndex = false,
 }: SEOHeadProps) {
   const fullTitle = title.includes("Bhagavad Gita") ? title : `${title} | Bhagavad Gita`;
   const canonicalUrl = canonical ? `${DOMAIN}${canonical}` : DOMAIN;
@@ -36,6 +38,15 @@ export function SEOHead({
       {keywords && <meta name="keywords" content={keywords} />}
       <link rel="canonical" href={canonicalUrl} />
 
+      <meta
+        name="robots"
+        content={
+          noIndex
+            ? "noindex, nofollow"
+            : "index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1"
+        }
+      />
+
       <meta property="og:site_name" content={SITE_NAME} />
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
@@ -45,13 +56,12 @@ export function SEOHead({
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:type" content={type} />
       <meta property="og:locale" content="en_IN" />
+      <meta property="og:locale:alternate" content="hi_IN" />
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
-
-      <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
 
       {schemas.map((schema, i) => (
         <script key={i} type="application/ld+json">

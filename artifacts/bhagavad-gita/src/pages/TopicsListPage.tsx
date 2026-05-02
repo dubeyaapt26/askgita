@@ -3,7 +3,7 @@ import { SEOHead } from "@/components/SEOHead";
 import { Footer } from "@/components/Footer";
 import { TOPICS, FEATURED_TOPIC_SLUGS } from "@/data/topics";
 
-const DOMAIN = "https://gita-reader--dubeyaapt.replit.app";
+const DOMAIN = "https://askgita.net";
 
 const topicsJsonLd = [
   {
@@ -18,8 +18,9 @@ const topicsJsonLd = [
     "@context": "https://schema.org",
     "@type": "CollectionPage",
     "name": "Bhagavad Gita Verses by Topic",
-    "description": "Browse all 48 Bhagavad Gita topic pages — verses on anxiety, karma, love, duty, depression, heartbreak, marriage, and more. Curated by Aapt Dubey at AskGita.net.",
+    "description": "Browse all 48 Bhagavad Gita topic pages — verses on anxiety, karma, love, duty, depression, heartbreak, marriage, and more. Curated at AskGita.net.",
     "url": `${DOMAIN}/topics`,
+    "isPartOf": { "@type": "WebSite", "name": "AskGita.net", "url": DOMAIN },
   },
 ];
 

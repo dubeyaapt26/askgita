@@ -1,6 +1,25 @@
 import { Link } from "wouter";
-import { SEOHead } from "@/components/SEOHead";
+import { SEOHead, DOMAIN } from "@/components/SEOHead";
 import { Footer } from "@/components/Footer";
+
+const contactJsonLd = [
+  {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "Home", "item": DOMAIN },
+      { "@type": "ListItem", "position": 2, "name": "Contact Us", "item": `${DOMAIN}/contact` },
+    ],
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ContactPage",
+    "name": "Contact AskGita.net",
+    "description": "Contact us for questions about the Bhagavad Gita website, verse corrections, suggestions, or partnership inquiries.",
+    "url": `${DOMAIN}/contact`,
+    "isPartOf": { "@type": "WebSite", "name": "AskGita.net", "url": DOMAIN },
+  },
+];
 
 export default function ContactPage() {
   return (
@@ -10,6 +29,7 @@ export default function ContactPage() {
         description="Contact us for questions about the Bhagavad Gita website, verse corrections, suggestions, or partnership inquiries."
         canonical="/contact"
         keywords="contact bhagavad gita, gita website contact, bhagavad gita feedback"
+        jsonLd={contactJsonLd}
       />
 
       <nav className="sticky top-0 z-50 bg-dark-brown/95 backdrop-blur border-b border-medium-brown px-4 py-4">
