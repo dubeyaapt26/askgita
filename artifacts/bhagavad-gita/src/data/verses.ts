@@ -1,3 +1,22 @@
+import { CH01 } from "./ch/ch01";
+import { CH02 } from "./ch/ch02";
+import { CH03 } from "./ch/ch03";
+import { CH04 } from "./ch/ch04";
+import { CH05 } from "./ch/ch05";
+import { CH06 } from "./ch/ch06";
+import { CH07 } from "./ch/ch07";
+import { CH08 } from "./ch/ch08";
+import { CH09 } from "./ch/ch09";
+import { CH10 } from "./ch/ch10";
+import { CH11 } from "./ch/ch11";
+import { CH12 } from "./ch/ch12";
+import { CH13 } from "./ch/ch13";
+import { CH14 } from "./ch/ch14";
+import { CH15 } from "./ch/ch15";
+import { CH16 } from "./ch/ch16";
+import { CH17 } from "./ch/ch17";
+import { CH18 } from "./ch/ch18";
+
 export interface WordEntry {
   word: string;
   iast: string;
@@ -20,7 +39,10 @@ export interface StaticVerse {
   modernRelevance?: string;
 }
 
-export const STATIC_VERSES: StaticVerse[] = [
+// Detailed overrides — these 74 hand-curated verses with full wordByWord /
+// explanation / gitaPressNote / modernRelevance take precedence over the
+// basic chapter-file entries when building the final verse map.
+const DETAILED_OVERRIDES: StaticVerse[] = [
   // ── Chapter 1 ──────────────────────────────────────────────────
   {
     chapterId: 1, id: 1, chapterName: "Arjuna's Dilemma",
@@ -750,6 +772,19 @@ export const STATIC_VERSES: StaticVerse[] = [
     themes: ["Victory", "Dharma", "God and Devotee", "Conclusion", "Auspiciousness"],
   },
 ];
+
+// Build a lookup of detailed overrides by "chapterId:verseId"
+const _detailedMap = new Map<string, StaticVerse>();
+for (const v of DETAILED_OVERRIDES) {
+  _detailedMap.set(`${v.chapterId}:${v.id}`, v);
+}
+
+// Merge all 700+ chapter verses; detailed overrides win where they exist
+export const STATIC_VERSES: StaticVerse[] = [
+  ...CH01, ...CH02, ...CH03, ...CH04, ...CH05, ...CH06,
+  ...CH07, ...CH08, ...CH09, ...CH10, ...CH11, ...CH12,
+  ...CH13, ...CH14, ...CH15, ...CH16, ...CH17, ...CH18,
+].map((v) => _detailedMap.get(`${v.chapterId}:${v.id}`) ?? v);
 
 const VERSE_MAP = new Map<string, StaticVerse>();
 for (const v of STATIC_VERSES) {
