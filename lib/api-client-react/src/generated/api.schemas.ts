@@ -8,3 +8,146 @@
 export interface HealthStatus {
   status: string;
 }
+
+export interface ErrorResponse {
+  error: string;
+}
+
+export type ChatMessageRole =
+  (typeof ChatMessageRole)[keyof typeof ChatMessageRole];
+
+export const ChatMessageRole = {
+  user: "user",
+  assistant: "assistant",
+} as const;
+
+export interface ChatMessage {
+  role: ChatMessageRole;
+  content: string;
+}
+
+export interface AskGitaBody {
+  /** The question to ask the Gita Oracle */
+  question: string;
+}
+
+export interface ChatWithGitaBody {
+  /** Conversation history */
+  messages: ChatMessage[];
+}
+
+export interface GitaVerse {
+  /** e.g. "Chapter 2, Verse 47" */
+  ref: string;
+  /** Sanskrit shloka text */
+  skt: string;
+}
+
+export interface GitaAnswer {
+  /** The wisdom response text */
+  text: string;
+  verse?: GitaVerse | null;
+}
+
+export interface ChapterSummary {
+  id: number;
+  /** English name of the chapter */
+  name: string;
+  /** Sanskrit name in Devanagari */
+  skt: string;
+  /** English meaning of the Sanskrit name */
+  meaning: string;
+  totalVerses: number;
+  summary: string;
+  themes: string[];
+  keyVerseRef: string;
+}
+
+export interface ChaptersResponse {
+  chapters: ChapterSummary[];
+}
+
+export interface VerseSummary {
+  id: number;
+  chapterId: number;
+  /** First line of Sanskrit verse */
+  skt: string;
+  /** Roman transliteration (first line) */
+  iast: string;
+  /** Short English translation */
+  english: string;
+  theme: string;
+}
+
+export interface ChapterDetailResponse {
+  id: number;
+  name: string;
+  skt: string;
+  meaning: string;
+  totalVerses: number;
+  summary: string;
+  longSummary: string;
+  themes: string[];
+  keyVerseRef: string;
+  setting: string;
+  verses: VerseSummary[];
+}
+
+export interface WordMeaning {
+  /** Sanskrit word in Devanagari */
+  word: string;
+  /** Roman transliteration */
+  iast: string;
+  /** Hindi meaning */
+  hindi: string;
+  /** English meaning */
+  english: string;
+}
+
+export interface VerseDetailResponse {
+  /** Verse number within the chapter */
+  id: number;
+  chapterId: number;
+  chapterName: string;
+  /** Full Sanskrit verse in Devanagari */
+  skt: string;
+  /** Full Roman transliteration */
+  iast: string;
+  /** Hindi translation */
+  hindi: string;
+  /** English translation */
+  english: string;
+  wordByWord: WordMeaning[];
+  /** Detailed explanation (Gita Press style) in Hindi */
+  explanation: string;
+  /** Gita Press specific commentary note */
+  gitaPressNote: string;
+  /** Modern day relevance and application */
+  modernRelevance: string;
+  themes: string[];
+  /** Previous verse number, null if first */
+  prevVerse?: number | null;
+  /** Next verse number, null if last */
+  nextVerse?: number | null;
+  /** Whether this detail was AI-generated (vs pre-built) */
+  isAiGenerated: boolean;
+}
+
+export interface ExplainLineBody {
+  chapterId: number;
+  verseId: number;
+  /** The specific Sanskrit line to explain */
+  line: string;
+  /** Optional full verse context */
+  context?: string;
+}
+
+export interface LineExplanation {
+  line: string;
+  /** Hindi explanation of this line */
+  hindi: string;
+  /** English explanation of this line */
+  english: string;
+  /** Word-by-word breakdown of this specific line */
+  wordBreakdown: WordMeaning[];
+}

@@ -5,18 +5,32 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import type {
+  MutationFunction,
   QueryFunction,
   QueryKey,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
   UseQueryResult,
 } from "@tanstack/react-query";
 
-import type { HealthStatus } from "./api.schemas";
+import type {
+  AskGitaBody,
+  ChapterDetailResponse,
+  ChaptersResponse,
+  ChatWithGitaBody,
+  ErrorResponse,
+  ExplainLineBody,
+  GitaAnswer,
+  HealthStatus,
+  LineExplanation,
+  VerseDetailResponse,
+} from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
-import type { ErrorType } from "../custom-fetch";
+import type { ErrorType, BodyType } from "../custom-fetch";
 
 type AwaitedInput<T> = PromiseLike<T> | T;
 
@@ -99,3 +113,518 @@ export function useHealthCheck<
 
   return { ...query, queryKey: queryOptions.queryKey };
 }
+
+/**
+ * Ask a question and receive wisdom from the Bhagavad Gita, powered by AI
+ * @summary Ask the Gita Oracle
+ */
+export const getAskGitaUrl = () => {
+  return `/api/gita/ask`;
+};
+
+export const askGita = async (
+  askGitaBody: AskGitaBody,
+  options?: RequestInit,
+): Promise<GitaAnswer> => {
+  return customFetch<GitaAnswer>(getAskGitaUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(askGitaBody),
+  });
+};
+
+export const getAskGitaMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof askGita>>,
+    TError,
+    { data: BodyType<AskGitaBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof askGita>>,
+  TError,
+  { data: BodyType<AskGitaBody> },
+  TContext
+> => {
+  const mutationKey = ["askGita"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof askGita>>,
+    { data: BodyType<AskGitaBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return askGita(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type AskGitaMutationResult = NonNullable<
+  Awaited<ReturnType<typeof askGita>>
+>;
+export type AskGitaMutationBody = BodyType<AskGitaBody>;
+export type AskGitaMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Ask the Gita Oracle
+ */
+export const useAskGita = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof askGita>>,
+    TError,
+    { data: BodyType<AskGitaBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof askGita>>,
+  TError,
+  { data: BodyType<AskGitaBody> },
+  TContext
+> => {
+  return useMutation(getAskGitaMutationOptions(options));
+};
+
+/**
+ * Multi-turn chat with the Gita Oracle
+ * @summary Chat with the Gita
+ */
+export const getChatWithGitaUrl = () => {
+  return `/api/gita/chat`;
+};
+
+export const chatWithGita = async (
+  chatWithGitaBody: ChatWithGitaBody,
+  options?: RequestInit,
+): Promise<GitaAnswer> => {
+  return customFetch<GitaAnswer>(getChatWithGitaUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(chatWithGitaBody),
+  });
+};
+
+export const getChatWithGitaMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof chatWithGita>>,
+    TError,
+    { data: BodyType<ChatWithGitaBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof chatWithGita>>,
+  TError,
+  { data: BodyType<ChatWithGitaBody> },
+  TContext
+> => {
+  const mutationKey = ["chatWithGita"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof chatWithGita>>,
+    { data: BodyType<ChatWithGitaBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return chatWithGita(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ChatWithGitaMutationResult = NonNullable<
+  Awaited<ReturnType<typeof chatWithGita>>
+>;
+export type ChatWithGitaMutationBody = BodyType<ChatWithGitaBody>;
+export type ChatWithGitaMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Chat with the Gita
+ */
+export const useChatWithGita = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof chatWithGita>>,
+    TError,
+    { data: BodyType<ChatWithGitaBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof chatWithGita>>,
+  TError,
+  { data: BodyType<ChatWithGitaBody> },
+  TContext
+> => {
+  return useMutation(getChatWithGitaMutationOptions(options));
+};
+
+/**
+ * Returns summary information for all 18 chapters of the Bhagavad Gita
+ * @summary Get all 18 chapters
+ */
+export const getGetChaptersUrl = () => {
+  return `/api/gita/chapters`;
+};
+
+export const getChapters = async (
+  options?: RequestInit,
+): Promise<ChaptersResponse> => {
+  return customFetch<ChaptersResponse>(getGetChaptersUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetChaptersQueryKey = () => {
+  return [`/api/gita/chapters`] as const;
+};
+
+export const getGetChaptersQueryOptions = <
+  TData = Awaited<ReturnType<typeof getChapters>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getChapters>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetChaptersQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getChapters>>> = ({
+    signal,
+  }) => getChapters({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getChapters>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetChaptersQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getChapters>>
+>;
+export type GetChaptersQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get all 18 chapters
+ */
+
+export function useGetChapters<
+  TData = Awaited<ReturnType<typeof getChapters>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getChapters>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetChaptersQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Returns full chapter detail including list of verse summaries
+ * @summary Get a chapter with verse list
+ */
+export const getGetChapterUrl = (chapterId: number) => {
+  return `/api/gita/chapters/${chapterId}`;
+};
+
+export const getChapter = async (
+  chapterId: number,
+  options?: RequestInit,
+): Promise<ChapterDetailResponse> => {
+  return customFetch<ChapterDetailResponse>(getGetChapterUrl(chapterId), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetChapterQueryKey = (chapterId: number) => {
+  return [`/api/gita/chapters/${chapterId}`] as const;
+};
+
+export const getGetChapterQueryOptions = <
+  TData = Awaited<ReturnType<typeof getChapter>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  chapterId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getChapter>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetChapterQueryKey(chapterId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getChapter>>> = ({
+    signal,
+  }) => getChapter(chapterId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!chapterId,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getChapter>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetChapterQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getChapter>>
+>;
+export type GetChapterQueryError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Get a chapter with verse list
+ */
+
+export function useGetChapter<
+  TData = Awaited<ReturnType<typeof getChapter>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  chapterId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getChapter>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetChapterQueryOptions(chapterId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Returns complete verse information including Sanskrit, transliteration, Hindi/English meanings, word-by-word breakdown, and detailed explanation. AI-generated and cached if not pre-built.
+ * @summary Get a single verse with full detail
+ */
+export const getGetVerseUrl = (chapterId: number, verseId: number) => {
+  return `/api/gita/chapters/${chapterId}/verses/${verseId}`;
+};
+
+export const getVerse = async (
+  chapterId: number,
+  verseId: number,
+  options?: RequestInit,
+): Promise<VerseDetailResponse> => {
+  return customFetch<VerseDetailResponse>(getGetVerseUrl(chapterId, verseId), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetVerseQueryKey = (chapterId: number, verseId: number) => {
+  return [`/api/gita/chapters/${chapterId}/verses/${verseId}`] as const;
+};
+
+export const getGetVerseQueryOptions = <
+  TData = Awaited<ReturnType<typeof getVerse>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  chapterId: number,
+  verseId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getVerse>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetVerseQueryKey(chapterId, verseId);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof getVerse>>> = ({
+    signal,
+  }) => getVerse(chapterId, verseId, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!(chapterId && verseId),
+    ...queryOptions,
+  } as UseQueryOptions<Awaited<ReturnType<typeof getVerse>>, TError, TData> & {
+    queryKey: QueryKey;
+  };
+};
+
+export type GetVerseQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getVerse>>
+>;
+export type GetVerseQueryError = ErrorType<ErrorResponse>;
+
+/**
+ * @summary Get a single verse with full detail
+ */
+
+export function useGetVerse<
+  TData = Awaited<ReturnType<typeof getVerse>>,
+  TError = ErrorType<ErrorResponse>,
+>(
+  chapterId: number,
+  verseId: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getVerse>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetVerseQueryOptions(chapterId, verseId, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * Get a detailed word-by-word and contextual explanation of a specific line from a Gita verse in Hindi and English
+ * @summary Explain a specific line of a verse
+ */
+export const getExplainVerseLineUrl = () => {
+  return `/api/gita/verses/explain-line`;
+};
+
+export const explainVerseLine = async (
+  explainLineBody: ExplainLineBody,
+  options?: RequestInit,
+): Promise<LineExplanation> => {
+  return customFetch<LineExplanation>(getExplainVerseLineUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(explainLineBody),
+  });
+};
+
+export const getExplainVerseLineMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof explainVerseLine>>,
+    TError,
+    { data: BodyType<ExplainLineBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof explainVerseLine>>,
+  TError,
+  { data: BodyType<ExplainLineBody> },
+  TContext
+> => {
+  const mutationKey = ["explainVerseLine"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof explainVerseLine>>,
+    { data: BodyType<ExplainLineBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return explainVerseLine(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type ExplainVerseLineMutationResult = NonNullable<
+  Awaited<ReturnType<typeof explainVerseLine>>
+>;
+export type ExplainVerseLineMutationBody = BodyType<ExplainLineBody>;
+export type ExplainVerseLineMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Explain a specific line of a verse
+ */
+export const useExplainVerseLine = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof explainVerseLine>>,
+    TError,
+    { data: BodyType<ExplainLineBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof explainVerseLine>>,
+  TError,
+  { data: BodyType<ExplainLineBody> },
+  TContext
+> => {
+  return useMutation(getExplainVerseLineMutationOptions(options));
+};

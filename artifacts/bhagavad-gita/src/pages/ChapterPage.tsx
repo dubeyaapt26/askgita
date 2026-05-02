@@ -1,18 +1,29 @@
 import React, { useState } from "react";
 import { Link, useParams } from "wouter";
-import { ArrowLeft, ArrowRight, BookOpen } from "lucide-react";
+import { useGetChapter } from "@workspace/api-client-react";
+import { ArrowLeft, ArrowRight, Search, BookOpen } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Footer } from "@/components/Footer";
-import { getChapter, getChapterVerseCount } from "@/data/chapters";
-
-const DOMAIN = "https://askgita.net";
 
 export default function ChapterPage() {
   const { chapterId } = useParams();
   const id = parseInt(chapterId || "1", 10);
-  const chapter = getChapter(id);
+  const { data: chapter, isLoading, error } = useGetChapter(id);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  if (!chapter) {
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-cream flex flex-col items-center justify-center p-4">
+        <div className="relative">
+          <div className="w-24 h-24 border-4 border-gold/30 rounded-full animate-[slowRotate_10s_linear_infinite]" />
+          <div className="absolute inset-0 flex items-center justify-center text-4xl text-saffron">🪷</div>
+        </div>
+        <p className="mt-8 text-xl font-cinzel text-text-medium animate-pulse">Loading Chapter...</p>
+      </div>
+    );
+  }
+
+  if (error || !chapter) {
     return (
       <div className="min-h-screen bg-cream flex flex-col items-center justify-center p-4 text-center">
         <h1 className="text-3xl font-cinzel text-dark-brown mb-4">Chapter not found</h1>
@@ -23,16 +34,24 @@ export default function ChapterPage() {
     );
   }
 
-  const totalVerses = getChapterVerseCount(id);
-  const verseNumbers = Array.from({ length: totalVerses }, (_, i) => i + 1);
+  const filteredVerses = chapter.verses.filter((v) => {
+    if (!searchQuery) return true;
+    const q = searchQuery.toLowerCase();
+    return (
+      v.english.toLowerCase().includes(q) ||
+      v.theme.toLowerCase().includes(q) ||
+      `${v.chapterId}.${v.id}`.includes(q)
+    );
+  });
 
+  const domain = "https://askgita.net";
   const chapterJsonLd = [
     {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       "itemListElement": [
-        { "@type": "ListItem", "position": 1, "name": "Home", "item": DOMAIN },
-        { "@type": "ListItem", "position": 2, "name": `Chapter ${chapter.id}: ${chapter.name}`, "item": `${DOMAIN}/chapter/${chapter.id}` },
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": domain },
+        { "@type": "ListItem", "position": 2, "name": `Chapter ${chapter.id}: ${chapter.name}`, "item": `${domain}/chapter/${chapter.id}` },
       ],
     },
     {
@@ -40,9 +59,9 @@ export default function ChapterPage() {
       "@type": "Article",
       "headline": `Bhagavad Gita Chapter ${chapter.id}: ${chapter.name} — ${chapter.meaning}`,
       "description": chapter.summary,
-      "url": `${DOMAIN}/chapter/${chapter.id}`,
+      "url": `${domain}/chapter/${chapter.id}`,
       "inLanguage": ["en", "hi", "sa"],
-      "isPartOf": { "@type": "Book", "name": "Bhagavad Gita", "url": DOMAIN },
+      "isPartOf": { "@type": "Book", "name": "Bhagavad Gita", "url": domain },
     },
   ];
 
@@ -57,14 +76,16 @@ export default function ChapterPage() {
         type="article"
       />
 
-      {/* Sticky breadcrumb nav */}
+      {/* Breadcrumb */}
       <nav className="sticky top-0 z-50 bg-parchment/95 backdrop-blur border-b border-gold px-4 py-3" aria-label="Breadcrumb">
         <div className="max-w-6xl mx-auto flex flex-wrap items-center text-sm font-cinzel text-text-medium gap-y-2">
           <Link href="/" className="hover:text-saffron flex items-center mr-2">
             <ArrowLeft className="w-4 h-4 mr-1" /> Home
           </Link>
-          <span className="mx-2 text-gold" aria-hidden="true">/</span>
+          <span className="mx-2 text-gold">/</span>
           <span className="font-bold text-dark-brown mr-2">Chapter {chapter.id}: {chapter.name}</span>
+          <span className="mx-2 text-gold hidden sm:inline">/</span>
+          <span className="hidden sm:inline">Verses</span>
         </div>
       </nav>
 
@@ -76,30 +97,26 @@ export default function ChapterPage() {
               {chapter.id.toString().padStart(2, "0")}
             </div>
           </div>
-
           <div className="md:col-span-6 text-center flex flex-col items-center">
             <h1 className="text-4xl md:text-5xl font-cinzel text-white mb-3">{chapter.name}</h1>
             <h2 className="text-2xl md:text-3xl font-devanagari text-saffron tracking-wider mb-3">{chapter.skt}</h2>
             <p className="text-gold italic font-serif text-xl mb-6">{chapter.meaning}</p>
-
             <div className="flex flex-wrap justify-center gap-3">
               <span className="bg-medium-brown/50 border border-gold/30 text-gold-light px-4 py-1.5 rounded-full text-sm font-cinzel tracking-wider uppercase">
                 {chapter.totalVerses} Shlokas
               </span>
-              {chapter.themes.slice(0, 4).map((theme, i) => (
+              {chapter.themes.map((theme, i) => (
                 <span key={i} className="bg-saffron/20 border border-saffron/40 text-cream px-4 py-1.5 rounded-full text-sm uppercase tracking-wider font-cinzel">
                   {theme}
                 </span>
               ))}
             </div>
           </div>
-
           <div className="md:col-span-3 text-center md:text-right border-t md:border-t-0 md:border-l border-gold/20 pt-6 md:pt-0 pl-0 md:pl-6">
             <BookOpen className="w-8 h-8 text-gold mb-3 mx-auto md:mx-0 md:ml-auto opacity-50" />
             <p className="font-serif italic text-base text-parchment opacity-90 mb-4">{chapter.setting}</p>
           </div>
         </div>
-
         <div className="max-w-3xl mx-auto mt-12 text-center">
           <p className="font-serif text-xl text-parchment leading-relaxed border-t border-gold/20 pt-8">
             {chapter.summary}
@@ -114,7 +131,6 @@ export default function ChapterPage() {
           <div className="prose prose-stone max-w-none text-text-medium font-serif leading-loose text-lg md:text-xl whitespace-pre-wrap">
             {chapter.longSummary}
           </div>
-
           {chapter.keyVerseRef && (
             <div className="mt-12 bg-cream border-l-4 border-gold p-6 rounded-r shadow-sm">
               <h3 className="font-cinzel text-saffron text-sm uppercase tracking-wider mb-2">Key Verse Focus</h3>
@@ -124,27 +140,60 @@ export default function ChapterPage() {
         </div>
       </section>
 
-      {/* All Verses Grid */}
+      {/* All Verses */}
       <section className="px-4 py-20 max-w-6xl mx-auto bg-cream">
         <div className="flex flex-col md:flex-row justify-between items-center mb-12 gap-6">
           <h2 className="text-3xl md:text-4xl font-cinzel text-dark-brown">All {chapter.totalVerses} Shlokas</h2>
-          <p className="text-text-muted font-serif text-sm">Click any verse number to read the full shloka</p>
+          <div className="relative w-full md:w-80">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-text-muted" />
+            <input
+              type="text"
+              placeholder="Search by keyword or verse number..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full pl-12 pr-4 py-3 bg-white border border-gold/30 rounded-full focus:outline-none focus:ring-2 focus:ring-saffron font-serif text-text-dark text-lg shadow-sm"
+            />
+          </div>
         </div>
 
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
-          {verseNumbers.map((v) => (
-            <Link
-              key={v}
-              href={`/chapter/${chapter.id}/verse/${v}`}
-              className="group flex flex-col items-center justify-center bg-white border border-gold/20 rounded-xl p-3 hover:border-gold hover:shadow-md hover:bg-parchment/60 hover:-translate-y-0.5 transition-all duration-200"
-            >
-              <span className="font-cinzel text-xs text-text-muted group-hover:text-saffron transition-colors mb-1">BG</span>
-              <span className="font-cinzel text-dark-brown text-base font-bold group-hover:text-saffron transition-colors">
-                {chapter.id}.{v}
-              </span>
-            </Link>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          {filteredVerses.map((verse) => (
+            <div key={verse.id} className="bg-white border border-gold/20 rounded-xl p-8 hover:shadow-lg hover:border-gold hover:-translate-y-1 transition-all duration-300 group flex flex-col h-full relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-bl from-parchment/50 to-transparent rounded-bl-full pointer-events-none" />
+              <div className="flex justify-between items-start mb-6 relative z-10">
+                <span className="bg-gold text-dark-brown font-cinzel text-sm font-bold px-4 py-1.5 rounded shadow-sm">
+                  BG {chapter.id}.{verse.id}
+                </span>
+                <span className="bg-saffron/10 text-saffron border border-saffron/20 text-xs px-3 py-1.5 rounded-full uppercase tracking-wider font-cinzel">
+                  {verse.theme}
+                </span>
+              </div>
+              <div className="flex-1 mb-8 relative z-10">
+                <p className="font-devanagari text-2xl text-deep-saffron mb-4 leading-relaxed line-clamp-2">
+                  {verse.skt.split('\n')[0]}
+                </p>
+                <p className="font-serif text-text-medium text-lg line-clamp-2 leading-relaxed">
+                  {verse.english}
+                </p>
+              </div>
+              <Link href={`/chapter/${chapter.id}/verse/${verse.id}`}
+                className="inline-flex items-center text-saffron font-cinzel text-sm uppercase tracking-wider group-hover:text-deep-saffron w-max relative z-10">
+                Read Full Shloka <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-2 transition-transform" />
+              </Link>
+            </div>
           ))}
         </div>
+
+        {filteredVerses.length === 0 && (
+          <div className="text-center py-20 bg-parchment rounded-xl border border-gold/20 mt-8">
+            <BookOpen className="w-12 h-12 text-gold/50 mx-auto mb-4" />
+            <p className="text-text-medium font-serif italic text-xl">No verses found matching "{searchQuery}"</p>
+            <button onClick={() => setSearchQuery("")}
+              className="mt-4 text-saffron font-cinzel uppercase tracking-wider text-sm hover:underline">
+              Clear Search
+            </button>
+          </div>
+        )}
       </section>
 
       {/* Navigation footer */}
@@ -155,11 +204,9 @@ export default function ChapterPage() {
               <ArrowLeft className="w-5 h-5 mr-2" /> <span className="hidden sm:inline">Prev Chapter</span>
             </Link>
           ) : <div className="w-32" />}
-
           <Link href="/" className="text-parchment hover:text-gold text-xs px-4 py-2 border border-medium-brown hover:border-gold rounded transition-colors">
             All Chapters
           </Link>
-
           {chapter.id < 18 ? (
             <Link href={`/chapter/${chapter.id + 1}`} className="hover:text-white flex items-center transition-colors justify-end">
               <span className="hidden sm:inline">Next Chapter</span> <ArrowRight className="w-5 h-5 ml-2" />

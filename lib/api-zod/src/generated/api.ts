@@ -27,7 +27,7 @@ export const AskGitaResponse = zod.object({
   text: zod.string().describe("The wisdom response text"),
   verse: zod
     .object({
-      ref: zod.string().describe('e.g. "Chapter 2, Verse 47"'),
+      ref: zod.string().describe('e.g. \"Chapter 2, Verse 47\"'),
       skt: zod.string().describe("Sanskrit shloka text"),
     })
     .nullish(),
@@ -52,7 +52,7 @@ export const ChatWithGitaResponse = zod.object({
   text: zod.string().describe("The wisdom response text"),
   verse: zod
     .object({
-      ref: zod.string().describe('e.g. "Chapter 2, Verse 47"'),
+      ref: zod.string().describe('e.g. \"Chapter 2, Verse 47\"'),
       skt: zod.string().describe("Sanskrit shloka text"),
     })
     .nullish(),

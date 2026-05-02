@@ -10,6 +10,10 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: gita
+    description: Bhagavad Gita AI Oracle
+  - name: content
+    description: Bhagavad Gita chapter and verse content
 paths:
   /healthz:
     get:
@@ -24,6 +28,136 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /gita/ask:
+    post:
+      operationId: askGita
+      tags: [gita]
+      summary: Ask the Gita Oracle
+      description: Ask a question and receive wisdom from the Bhagavad Gita, powered by AI
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/AskGitaBody"
+      responses:
+        "200":
+          description: Wisdom from the Gita
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GitaAnswer"
+  /gita/chat:
+    post:
+      operationId: chatWithGita
+      tags: [gita]
+      summary: Chat with the Gita
+      description: Multi-turn chat with the Gita Oracle
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ChatWithGitaBody"
+      responses:
+        "200":
+          description: AI response from the Gita
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GitaAnswer"
+  /gita/chapters:
+    get:
+      operationId: getChapters
+      tags: [content]
+      summary: Get all 18 chapters
+      description: Returns summary information for all 18 chapters of the Bhagavad Gita
+      responses:
+        "200":
+          description: List of all chapters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChaptersResponse"
+  /gita/chapters/{chapterId}:
+    get:
+      operationId: getChapter
+      tags: [content]
+      summary: Get a chapter with verse list
+      description: Returns full chapter detail including list of verse summaries
+      parameters:
+        - name: chapterId
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 18
+      responses:
+        "200":
+          description: Chapter detail with verses
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ChapterDetailResponse"
+        "404":
+          description: Chapter not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /gita/chapters/{chapterId}/verses/{verseId}:
+    get:
+      operationId: getVerse
+      tags: [content]
+      summary: Get a single verse with full detail
+      description: Returns complete verse information including Sanskrit, transliteration, Hindi/English meanings, word-by-word breakdown, and detailed explanation. AI-generated and cached if not pre-built.
+      parameters:
+        - name: chapterId
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 18
+        - name: verseId
+          in: path
+          required: true
+          schema:
+            type: integer
+            minimum: 1
+      responses:
+        "200":
+          description: Full verse detail
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/VerseDetailResponse"
+        "404":
+          description: Verse not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+  /gita/verses/explain-line:
+    post:
+      operationId: explainVerseLine
+      tags: [gita]
+      summary: Explain a specific line of a verse
+      description: Get a detailed word-by-word and contextual explanation of a specific line from a Gita verse in Hindi and English
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ExplainLineBody"
+      responses:
+        "200":
+          description: Detailed line explanation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LineExplanation"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +167,292 @@ components:
           type: string
       required:
         - status
-
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
+    ChatMessage:
+      type: object
+      properties:
+        role:
+          type: string
+          enum: [user, assistant]
+        content:
+          type: string
+      required:
+        - role
+        - content
+    AskGitaBody:
+      type: object
+      properties:
+        question:
+          type: string
+          description: The question to ask the Gita Oracle
+      required:
+        - question
+    ChatWithGitaBody:
+      type: object
+      properties:
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChatMessage"
+          description: Conversation history
+      required:
+        - messages
+    GitaVerse:
+      type: object
+      properties:
+        ref:
+          type: string
+          description: e.g. "Chapter 2, Verse 47"
+        skt:
+          type: string
+          description: Sanskrit shloka text
+      required:
+        - ref
+        - skt
+    GitaAnswer:
+      type: object
+      properties:
+        text:
+          type: string
+          description: The wisdom response text
+        verse:
+          $ref: "#/components/schemas/GitaVerse"
+          nullable: true
+      required:
+        - text
+    ChapterSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+          description: English name of the chapter
+        skt:
+          type: string
+          description: Sanskrit name in Devanagari
+        meaning:
+          type: string
+          description: English meaning of the Sanskrit name
+        totalVerses:
+          type: integer
+        summary:
+          type: string
+        themes:
+          type: array
+          items:
+            type: string
+        keyVerseRef:
+          type: string
+      required:
+        - id
+        - name
+        - skt
+        - meaning
+        - totalVerses
+        - summary
+        - themes
+        - keyVerseRef
+    ChaptersResponse:
+      type: object
+      properties:
+        chapters:
+          type: array
+          items:
+            $ref: "#/components/schemas/ChapterSummary"
+      required:
+        - chapters
+    VerseSummary:
+      type: object
+      properties:
+        id:
+          type: integer
+        chapterId:
+          type: integer
+        skt:
+          type: string
+          description: First line of Sanskrit verse
+        iast:
+          type: string
+          description: Roman transliteration (first line)
+        english:
+          type: string
+          description: Short English translation
+        theme:
+          type: string
+      required:
+        - id
+        - chapterId
+        - skt
+        - iast
+        - english
+        - theme
+    ChapterDetailResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        skt:
+          type: string
+        meaning:
+          type: string
+        totalVerses:
+          type: integer
+        summary:
+          type: string
+        longSummary:
+          type: string
+        themes:
+          type: array
+          items:
+            type: string
+        keyVerseRef:
+          type: string
+        setting:
+          type: string
+        verses:
+          type: array
+          items:
+            $ref: "#/components/schemas/VerseSummary"
+      required:
+        - id
+        - name
+        - skt
+        - meaning
+        - totalVerses
+        - summary
+        - longSummary
+        - themes
+        - keyVerseRef
+        - setting
+        - verses
+    WordMeaning:
+      type: object
+      properties:
+        word:
+          type: string
+          description: Sanskrit word in Devanagari
+        iast:
+          type: string
+          description: Roman transliteration
+        hindi:
+          type: string
+          description: Hindi meaning
+        english:
+          type: string
+          description: English meaning
+      required:
+        - word
+        - iast
+        - hindi
+        - english
+    VerseDetailResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Verse number within the chapter
+        chapterId:
+          type: integer
+        chapterName:
+          type: string
+        skt:
+          type: string
+          description: Full Sanskrit verse in Devanagari
+        iast:
+          type: string
+          description: Full Roman transliteration
+        hindi:
+          type: string
+          description: Hindi translation
+        english:
+          type: string
+          description: English translation
+        wordByWord:
+          type: array
+          items:
+            $ref: "#/components/schemas/WordMeaning"
+        explanation:
+          type: string
+          description: Detailed explanation (Gita Press style) in Hindi
+        gitaPressNote:
+          type: string
+          description: Gita Press specific commentary note
+        modernRelevance:
+          type: string
+          description: Modern day relevance and application
+        themes:
+          type: array
+          items:
+            type: string
+        prevVerse:
+          type: integer
+          nullable: true
+          description: Previous verse number, null if first
+        nextVerse:
+          type: integer
+          nullable: true
+          description: Next verse number, null if last
+        isAiGenerated:
+          type: boolean
+          description: Whether this detail was AI-generated (vs pre-built)
+      required:
+        - id
+        - chapterId
+        - chapterName
+        - skt
+        - iast
+        - hindi
+        - english
+        - wordByWord
+        - explanation
+        - gitaPressNote
+        - modernRelevance
+        - themes
+        - isAiGenerated
+    ExplainLineBody:
+      type: object
+      properties:
+        chapterId:
+          type: integer
+        verseId:
+          type: integer
+        line:
+          type: string
+          description: The specific Sanskrit line to explain
+        context:
+          type: string
+          description: Optional full verse context
+      required:
+        - chapterId
+        - verseId
+        - line
+    LineExplanation:
+      type: object
+      properties:
+        line:
+          type: string
+        hindi:
+          type: string
+          description: Hindi explanation of this line
+        english:
+          type: string
+          description: English explanation of this line
+        wordBreakdown:
+          type: array
+          items:
+            $ref: "#/components/schemas/WordMeaning"
+          description: Word-by-word breakdown of this specific line
+      required:
+        - line
+        - hindi
+        - english
+        - wordBreakdown
