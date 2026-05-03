@@ -2,7 +2,7 @@
   "version": 2,
   "framework": null,
   "installCommand": "pnpm install --frozen-lockfile",
-  "buildCommand": "NODE_ENV=production BASE_PATH=/ PORT=3000 pnpm --filter @workspace/bhagavad-gita run build",
+  "buildCommand": "NODE_ENV=production BASE_PATH=/ PORT=3000 pnpm --filter @workspace/bhagavad-gita run build --force",
   "outputDirectory": "artifacts/bhagavad-gita/dist/public",
   "functions": {
     "api/index.js": {
