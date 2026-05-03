@@ -1,6 +1,7 @@
 import { Link } from "wouter";
 import { SEOHead, DOMAIN } from "@/components/SEOHead";
 import { Footer } from "@/components/Footer";
+import { SiteLogo } from "@/components/SiteLogo";
 
 const aboutJsonLd = [
   {
@@ -43,7 +44,9 @@ export default function AboutPage() {
       {/* Nav */}
       <nav className="sticky top-0 z-50 bg-dark-brown/95 backdrop-blur border-b border-medium-brown px-4 py-4">
         <div className="max-w-6xl mx-auto flex items-center text-sm font-cinzel text-parchment/70 gap-2">
-          <Link href="/" className="hover:text-gold transition-colors">Home</Link>
+          <Link href="/" className="hover:opacity-80 transition-opacity" aria-label="AskGita.net — Bhagavad Gita — Go to Homepage">
+            <SiteLogo size="sm" variant="light" />
+          </Link>
           <span className="text-gold">›</span>
           <span className="text-gold font-semibold">About Us</span>
         </div>

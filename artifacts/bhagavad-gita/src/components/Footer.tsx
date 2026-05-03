@@ -1,4 +1,5 @@
 import { Link } from "wouter";
+import { SiteLogo } from "@/components/SiteLogo";
 
 const TOPIC_CATEGORIES = [
   { name: "Mind & Emotions", slug: "gita-verses-on-overcoming-anxiety", icon: "🧠" },
@@ -20,8 +21,13 @@ export function Footer() {
 
         {/* Brand column */}
         <div>
-          <div className="text-3xl text-gold mb-2 font-devanagari">ॐ</div>
-          <h2 className="font-cinzel text-gold text-xl font-semibold mb-0.5">AskGita.net</h2>
+          <Link
+            href="/"
+            aria-label="AskGita.net — Bhagavad Gita in Sanskrit, Hindi &amp; English — Go to Homepage"
+            className="inline-block hover:opacity-80 transition-opacity mb-2"
+          >
+            <SiteLogo size="lg" variant="light" />
+          </Link>
           <p className="text-parchment/40 font-cinzel text-xs mb-4 tracking-wider">by Aapt Dubey</p>
           <p className="text-parchment/70 font-serif text-sm leading-relaxed mb-6">
             All 18 chapters and 700 shlokas of the Srimad Bhagavad Gita — Sanskrit, Hindi &amp; English, with AI insights.

@@ -2,6 +2,7 @@ import { Link } from "wouter";
 import { SEOHead } from "@/components/SEOHead";
 import { Footer } from "@/components/Footer";
 import { TOPICS, FEATURED_TOPIC_SLUGS } from "@/data/topics";
+import { SiteLogo } from "@/components/SiteLogo";
 
 const DOMAIN = "https://askgita.net";
 
@@ -348,7 +349,9 @@ export default function TopicsListPage() {
       {/* Nav */}
       <nav className="sticky top-0 z-50 bg-dark-brown/95 backdrop-blur border-b border-medium-brown px-4 py-3">
         <div className="max-w-7xl mx-auto flex items-center text-sm font-cinzel text-parchment/70 gap-2">
-          <Link href="/" className="hover:text-gold transition-colors">Home</Link>
+          <Link href="/" className="hover:opacity-80 transition-opacity" aria-label="AskGita.net — Bhagavad Gita — Go to Homepage">
+            <SiteLogo size="sm" variant="light" />
+          </Link>
           <span className="text-gold">›</span>
           <span className="text-gold font-semibold">Gita Topics</span>
         </div>

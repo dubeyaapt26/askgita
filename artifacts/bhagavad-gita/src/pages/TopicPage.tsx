@@ -6,6 +6,7 @@ import { TOPICS, TOPIC_BY_SLUG, type Topic } from "@/data/topics";
 import { getStaticVerse, type StaticVerse } from "@/data/verses";
 import { BookOpen, ChevronRight, ExternalLink, Sparkles } from "lucide-react";
 import { getApiUrl } from "@/lib/api-url";
+import { SiteLogo } from "@/components/SiteLogo";
 
 const DOMAIN = "https://askgita.net";
 
@@ -462,8 +463,8 @@ export default function TopicPage() {
         aria-label="Breadcrumb"
       >
         <div className="max-w-7xl mx-auto flex items-center text-sm font-cinzel text-parchment/70 gap-2 flex-wrap">
-          <Link href="/" className="hover:text-gold transition-colors">
-            Home
+          <Link href="/" className="hover:opacity-80 transition-opacity" aria-label="AskGita.net — Bhagavad Gita — Go to Homepage">
+            <SiteLogo size="sm" variant="light" />
           </Link>
           <span className="text-gold">›</span>
           <Link href="/topics" className="hover:text-gold transition-colors">

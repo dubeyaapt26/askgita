@@ -5,6 +5,7 @@ import { ArrowLeft, ArrowRight, Sparkles, BookOpen, ChevronDown, ChevronUp } fro
 import { SEOHead } from "@/components/SEOHead";
 import { Footer } from "@/components/Footer";
 import { TOPICS } from "@/data/topics";
+import { SiteLogo } from "@/components/SiteLogo";
 
 function renderFormattedText(text: string) {
   return text.split('\n\n').map((paragraph, i) => {
@@ -241,7 +242,13 @@ export default function VersePage() {
       <nav className="sticky top-0 z-50 bg-parchment/95 backdrop-blur border-b border-gold px-4 py-3 shadow-sm" aria-label="Breadcrumb">
         <div className="max-w-6xl mx-auto flex flex-wrap items-center justify-between gap-y-2">
           <div className="flex items-center text-sm md:text-base font-cinzel text-text-medium">
-            <Link href="/" className="hover:text-saffron transition-colors">Home</Link>
+            <Link
+              href="/"
+              className="hover:opacity-80 transition-opacity"
+              aria-label="AskGita.net — Bhagavad Gita — Go to Homepage"
+            >
+              <SiteLogo size="sm" variant="dark" />
+            </Link>
             <span className="mx-2 text-gold">/</span>
             <Link href={`/chapter/${verse.chapterId}`} className="hover:text-saffron transition-colors">
               <span className="hidden sm:inline">Chapter {verse.chapterId}: </span>{verse.chapterName}

@@ -4,6 +4,7 @@ import { useGetChapter } from "@workspace/api-client-react";
 import { ArrowLeft, ArrowRight, Search, BookOpen } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Footer } from "@/components/Footer";
+import { SiteLogo } from "@/components/SiteLogo";
 
 export default function ChapterPage() {
   const { chapterId } = useParams();
@@ -120,8 +121,13 @@ export default function ChapterPage() {
       {/* Breadcrumb */}
       <nav className="sticky top-0 z-50 bg-parchment/95 backdrop-blur border-b border-gold px-4 py-3" aria-label="Breadcrumb">
         <div className="max-w-6xl mx-auto flex flex-wrap items-center text-sm font-cinzel text-text-medium gap-y-2">
-          <Link href="/" className="hover:text-saffron flex items-center mr-2">
-            <ArrowLeft className="w-4 h-4 mr-1" /> Home
+          <Link
+            href="/"
+            className="hover:opacity-80 flex items-center gap-2 mr-2 transition-opacity"
+            aria-label="AskGita.net — Bhagavad Gita — Go to Homepage"
+          >
+            <ArrowLeft className="w-4 h-4 text-saffron flex-shrink-0" />
+            <SiteLogo size="sm" variant="dark" />
           </Link>
           <span className="mx-2 text-gold">/</span>
           <span className="font-bold text-dark-brown mr-2">Chapter {chapter.id}: {chapter.name}</span>

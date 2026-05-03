@@ -3,6 +3,7 @@ import { Link, useLocation } from "wouter";
 import { FloatingChatbot } from "@/components/FloatingChatbot";
 import { SEOHead } from "@/components/SEOHead";
 import { Footer } from "@/components/Footer";
+import { SiteLogo } from "@/components/SiteLogo";
 
 import { getApiUrl } from "@/lib/api-url";
 
@@ -192,7 +193,9 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <div className="flex-shrink-0 flex items-center">
-              <span className="font-cinzel text-xl text-gold font-semibold tracking-wide">Bhagavad Gita</span>
+              <Link href="/" aria-label="AskGita.net — Bhagavad Gita Sacred Wisdom — Go to Homepage">
+                <SiteLogo size="md" variant="light" />
+              </Link>
             </div>
             <div className="hidden md:flex space-x-8">
               {navLinks.map((link) => (
