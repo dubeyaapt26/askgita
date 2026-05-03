@@ -78,10 +78,12 @@ const CORE_PHILOSOPHIES = [
 ];
 
 export default function Home() {
-  const askGitaMut = useAskGita();
   const [question, setQuestion] = useState("");
   const [searchVerseKeyword, setSearchVerseKeyword] = useState("");
   const [, setLocation] = useLocation();
+  const [searchResult, setSearchResult] = useState<SearchResult | null>(null);
+  const [isSearching, setIsSearching] = useState(false);
+  const [searchError, setSearchError] = useState<string | null>(null);
 
   const filteredVerses = VERSES.filter((v) => {
     if (searchVerseKeyword) {
@@ -95,13 +97,29 @@ export default function Home() {
     return true;
   });
 
-  const handleAsk = (q: string) => {
-    if (!q.trim()) return;
+  const handleAsk = async (q: string) => {
+    if (!q.trim() || isSearching) return;
     setQuestion(q);
-    askGitaMut.mutate({ data: { question: q } });
+    setSearchResult(null);
+    setSearchError(null);
+    setIsSearching(true);
     setTimeout(() => {
       document.getElementById("oracle-answer")?.scrollIntoView({ behavior: "smooth" });
     }, 100);
+    try {
+      const res = await fetch(`${BASE_URL}api/gita/chat/v2`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ messages: [{ role: "user", content: q }] }),
+      });
+      if (!res.ok) throw new Error("API error");
+      const data: SearchResult = await res.json();
+      setSearchResult(data);
+    } catch {
+      setSearchError("Could not reach the Gita Oracle. Please try again.");
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   const navLinks = [
@@ -230,10 +248,10 @@ export default function Home() {
               />
               <button
                 onClick={() => handleAsk(question)}
-                disabled={askGitaMut.isPending || !question.trim()}
+                disabled={isSearching || !question.trim()}
                 className="absolute right-2 top-2 bottom-2 bg-gradient-to-r from-saffron to-gold text-dark-brown font-cinzel font-bold px-5 md:px-7 rounded-full hover:brightness-110 transition-all disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center text-sm md:text-base whitespace-nowrap"
               >
-                🪷 {askGitaMut.isPending ? "Seeking..." : "Ask the Gita"}
+                🪷 {isSearching ? "Seeking..." : "Ask the Gita"}
               </button>
             </div>
 
@@ -253,22 +271,91 @@ export default function Home() {
         </div>
 
         {/* Oracle Answer */}
-        {askGitaMut.data && (
-          <div id="oracle-answer" className="relative z-10 w-full max-w-3xl mx-auto mt-8 bg-cream p-8 rounded-2xl border border-gold shadow-xl animate-in fade-in slide-in-from-bottom-8 duration-700">
-            <div className="text-center mb-6">
-              <span className="font-cinzel text-saffron text-lg tracking-widest uppercase">The Oracle Answers</span>
-            </div>
-            <div className="prose prose-stone max-w-none text-lg leading-relaxed text-text-medium whitespace-pre-wrap font-serif">
-              {askGitaMut.data.text}
-            </div>
-            {askGitaMut.data.verse && (
-              <div className="mt-8 bg-parchment border border-gold/40 p-6 rounded-xl text-center shadow-inner">
-                <p className="font-devanagari text-xl md:text-2xl text-deep-saffron leading-loose whitespace-pre-wrap">
-                  {askGitaMut.data.verse.skt}
-                </p>
-                <div className="mt-4 inline-block bg-medium-brown text-gold-light font-cinzel text-sm px-4 py-1 rounded-full">
-                  {askGitaMut.data.verse.ref}
+        {(isSearching || searchResult || searchError) && (
+          <div id="oracle-answer" className="relative z-10 w-full max-w-3xl mx-auto mt-8 animate-in fade-in slide-in-from-bottom-8 duration-700">
+
+            {/* Loading state */}
+            {isSearching && (
+              <div className="bg-cream/10 backdrop-blur border border-gold/30 rounded-2xl p-8 text-center">
+                <div className="text-4xl text-gold/40 font-devanagari mb-3">ॐ</div>
+                <div className="flex justify-center gap-1.5 mb-3">
+                  <span className="w-2.5 h-2.5 bg-saffron rounded-full animate-bounce" style={{ animationDelay: "0ms" }} />
+                  <span className="w-2.5 h-2.5 bg-saffron rounded-full animate-bounce" style={{ animationDelay: "120ms" }} />
+                  <span className="w-2.5 h-2.5 bg-saffron rounded-full animate-bounce" style={{ animationDelay: "240ms" }} />
                 </div>
+                <p className="font-cinzel text-parchment/70 text-sm uppercase tracking-widest">Seeking wisdom from the Gita…</p>
+              </div>
+            )}
+
+            {/* Error state */}
+            {searchError && !isSearching && (
+              <div className="bg-red-950/40 border border-red-500/30 rounded-2xl p-6 text-center">
+                <p className="font-serif text-parchment/80 text-base">{searchError}</p>
+              </div>
+            )}
+
+            {/* Off-topic refusal */}
+            {searchResult?.refused && !isSearching && (
+              <div className="bg-amber-950/40 border border-amber-500/30 rounded-2xl p-6 text-center">
+                <div className="text-3xl mb-3">🪷</div>
+                <p className="font-serif text-parchment text-base leading-relaxed mb-2">{searchResult.message}</p>
+                {searchResult.messageHindi && (
+                  <p className="font-devanagari text-parchment/70 text-base leading-relaxed mt-3">{searchResult.messageHindi}</p>
+                )}
+              </div>
+            )}
+
+            {/* Full bilingual answer */}
+            {searchResult && !searchResult.refused && !isSearching && (
+              <div className="bg-cream rounded-2xl border border-gold shadow-xl overflow-hidden">
+                <div className="text-center py-4 px-6 border-b border-gold/20 bg-dark-brown/5">
+                  <span className="font-cinzel text-saffron text-base tracking-widest uppercase">The Gita Speaks</span>
+                </div>
+
+                {/* English */}
+                {searchResult.english && (
+                  <div className="p-6 md:p-8 border-b border-gold/10">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs font-cinzel text-saffron uppercase tracking-widest bg-saffron/10 px-2 py-0.5 rounded">English</span>
+                    </div>
+                    <p className="font-serif text-text-dark text-lg leading-relaxed">{searchResult.english}</p>
+                  </div>
+                )}
+
+                {/* Hindi */}
+                {searchResult.hindi && (
+                  <div className="p-6 md:p-8 bg-parchment/40 border-b border-gold/10">
+                    <div className="flex items-center gap-2 mb-3">
+                      <span className="text-xs font-cinzel text-saffron uppercase tracking-widest bg-saffron/10 px-2 py-0.5 rounded">हिंदी</span>
+                    </div>
+                    <p className="font-devanagari text-text-dark text-lg leading-[2]">{searchResult.hindi}</p>
+                  </div>
+                )}
+
+                {/* Referenced verses */}
+                {searchResult.verses && searchResult.verses.length > 0 && (
+                  <div className="p-5 bg-dark-brown/5">
+                    <p className="text-[11px] font-cinzel text-text-muted uppercase tracking-widest mb-3">Referenced Shlokas</p>
+                    <div className="flex flex-wrap gap-2">
+                      {searchResult.verses.map((v, i) => (
+                        <Link
+                          key={i}
+                          href={`/chapter/${v.chapterId}/verse/${v.verseId}`}
+                          className="group flex flex-col bg-white hover:bg-saffron/5 border border-gold/30 hover:border-saffron/60 rounded-xl px-4 py-3 transition-all cursor-pointer shadow-sm"
+                        >
+                          <span className="text-xs font-cinzel font-bold text-saffron group-hover:text-deep-saffron">
+                            BG {v.chapterId}.{v.verseId}
+                          </span>
+                          {v.skt && (
+                            <span className="font-devanagari text-[12px] text-text-medium leading-tight mt-1 line-clamp-1 max-w-[180px]">
+                              {v.skt.split("\n")[0]}
+                            </span>
+                          )}
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </div>
             )}
           </div>
