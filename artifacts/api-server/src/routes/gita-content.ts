@@ -2,7 +2,7 @@ import { Router } from "express";
 import { eq, and } from "drizzle-orm";
 import { db } from "@workspace/db";
 import { verseCache } from "@workspace/db/schema";
-import { anthropic } from "@workspace/integrations-anthropic-ai";
+import { openai } from "@workspace/integrations-openai-ai-server";
 import { CHAPTERS } from "../data/chapters";
 import { getKeyVerse } from "../data/key-verses";
 
@@ -13,6 +13,28 @@ const CHAPTER_VERSE_COUNTS: Record<number, number> = {
   9: 34, 10: 42, 11: 55, 12: 20, 13: 35, 14: 27, 15: 20,
   16: 24, 17: 28, 18: 78,
 };
+
+const VERSE_GENERATION_PROMPT = (chapterId: number, verseId: number, chapterName: string, chapterSkt: string) =>
+  `You are a Bhagavad Gita scholar with deep knowledge of Sanskrit and the Gita Press commentary tradition.
+
+Generate complete, accurate information for Bhagavad Gita Chapter ${chapterId}, Verse ${verseId} (${chapterName} — ${chapterSkt}).
+
+Respond with ONLY valid JSON matching this exact structure (no markdown, no code blocks, no extra text):
+{
+  "skt": "Full Sanskrit verse in Devanagari script with line breaks using \\n",
+  "iast": "Full IAST transliteration with line breaks using \\n",
+  "hindi": "Complete Hindi translation (2-4 sentences, faithful to Gita Press style)",
+  "english": "Complete English translation (2-4 sentences)",
+  "wordByWord": [
+    {"word": "Sanskrit word", "iast": "IAST", "hindi": "Hindi meaning", "english": "English meaning"}
+  ],
+  "explanation": "Detailed explanation in Hindi (300-500 words, Gita Press Gorakhpur style, use \\n\\n for paragraphs, use **bold** for key terms). Include the philosophical context, connection to surrounding verses, and what the commentators say.",
+  "gitaPressNote": "Specific Gita Press (Gorakhpur) commentary note in Hindi, referencing Swami Ramsukhdas ji if applicable (100-150 words)",
+  "modernRelevance": "Modern day application and relevance in Hindi (150-200 words) — practical examples from daily life, work, relationships",
+  "themes": ["Theme1", "Theme2", "Theme3"]
+}
+
+Be authentic, scholarly, and faithful to the original meaning. The Sanskrit must be accurate. Themes should be in English.`;
 
 // GET /gita/chapters — list all 18 chapters
 router.get("/gita/chapters", (_req, res) => {
@@ -152,34 +174,15 @@ router.get("/gita/chapters/:chapterId/verses/:verseId", async (req, res) => {
   // Generate via AI and cache
   req.log.info({ chapterId, verseId }, "Generating verse detail via AI");
   try {
-    const prompt = `You are a Bhagavad Gita scholar with deep knowledge of Sanskrit and the Gita Press commentary tradition.
+    const prompt = VERSE_GENERATION_PROMPT(chapterId, verseId, chapter.name, chapter.skt);
 
-Generate complete, accurate information for Bhagavad Gita Chapter ${chapterId}, Verse ${verseId} (${chapter.name} — ${chapter.skt}).
-
-Respond with ONLY valid JSON matching this exact structure (no markdown, no code blocks, no extra text):
-{
-  "skt": "Full Sanskrit verse in Devanagari script with line breaks using \\n",
-  "iast": "Full IAST transliteration with line breaks using \\n",
-  "hindi": "Complete Hindi translation (2-4 sentences, faithful to Gita Press style)",
-  "english": "Complete English translation (2-4 sentences)",
-  "wordByWord": [
-    {"word": "Sanskrit word", "iast": "IAST", "hindi": "Hindi meaning", "english": "English meaning"}
-  ],
-  "explanation": "Detailed explanation in Hindi (300-500 words, Gita Press Gorakhpur style, use \\n\\n for paragraphs, use **bold** for key terms). Include the philosophical context, connection to surrounding verses, and what the commentators say.",
-  "gitaPressNote": "Specific Gita Press (Gorakhpur) commentary note in Hindi, referencing Swami Ramsukhdas ji if applicable (100-150 words)",
-  "modernRelevance": "Modern day application and relevance in Hindi (150-200 words) — practical examples from daily life, work, relationships",
-  "themes": ["Theme1", "Theme2", "Theme3"]
-}
-
-Be authentic, scholarly, and faithful to the original meaning. The Sanskrit must be accurate. Themes should be in English.`;
-
-    const message = await anthropic.messages.create({
-      model: "claude-sonnet-4-5",
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
       max_tokens: 4096,
       messages: [{ role: "user", content: prompt }],
     });
 
-    const rawText = message.content[0]?.type === "text" ? message.content[0].text : "{}";
+    const rawText = response.choices[0]?.message?.content ?? "{}";
 
     const jsonText = rawText
       .replace(/^```(?:json)?\s*/i, "")
@@ -239,32 +242,13 @@ router.post("/gita/verses/prewarm", async (req, res) => {
 
   setImmediate(async () => {
     try {
-      const prompt = `You are a Bhagavad Gita scholar with deep knowledge of Sanskrit and the Gita Press commentary tradition.
-
-Generate complete, accurate information for Bhagavad Gita Chapter ${chapterId}, Verse ${verseId} (${chapter.name} — ${chapter.skt}).
-
-Respond with ONLY valid JSON matching this exact structure (no markdown, no code blocks, no extra text):
-{
-  "skt": "Full Sanskrit verse in Devanagari script with line breaks using \\n",
-  "iast": "Full IAST transliteration with line breaks using \\n",
-  "hindi": "Complete Hindi translation (2-4 sentences, faithful to Gita Press style)",
-  "english": "Complete English translation (2-4 sentences)",
-  "wordByWord": [
-    {"word": "Sanskrit word", "iast": "IAST", "hindi": "Hindi meaning", "english": "English meaning"}
-  ],
-  "explanation": "Detailed explanation in Hindi (300-500 words, Gita Press Gorakhpur style, use \\n\\n for paragraphs, use **bold** for key terms). Include the philosophical context, connection to surrounding verses, and what the commentators say.",
-  "gitaPressNote": "Specific Gita Press (Gorakhpur) commentary note in Hindi, referencing Swami Ramsukhdas ji if applicable (100-150 words)",
-  "modernRelevance": "Modern day application and relevance in Hindi (150-200 words) — practical examples from daily life, work, relationships",
-  "themes": ["Theme1", "Theme2", "Theme3"]
-}
-
-Be authentic, scholarly, and faithful to the original meaning. The Sanskrit must be accurate. Themes should be in English.`;
-      const message = await anthropic.messages.create({
-        model: "claude-sonnet-4-5",
+      const prompt = VERSE_GENERATION_PROMPT(chapterId, verseId, chapter.name, chapter.skt);
+      const response = await openai.chat.completions.create({
+        model: "gpt-4o",
         max_tokens: 4096,
         messages: [{ role: "user", content: prompt }],
       });
-      const rawText = message.content[0]?.type === "text" ? message.content[0].text : "{}";
+      const rawText = response.choices[0]?.message?.content ?? "{}";
       const jsonText = rawText.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
       const verseData = JSON.parse(jsonText);
       const fullData = { id: verseId, chapterId, chapterName: chapter.name, ...verseData };
@@ -300,32 +284,13 @@ router.post("/gita/admin/seed-all", async (req, res) => {
         try {
           const chapter = CHAPTERS.find(c => c.id === chapterId);
           if (!chapter) return;
-          const prompt = `You are a Bhagavad Gita scholar with deep knowledge of Sanskrit and the Gita Press commentary tradition.
-
-Generate complete, accurate information for Bhagavad Gita Chapter ${chapterId}, Verse ${verseId} (${chapter.name} — ${chapter.skt}).
-
-Respond with ONLY valid JSON matching this exact structure (no markdown, no code blocks, no extra text):
-{
-  "skt": "Full Sanskrit verse in Devanagari script with line breaks using \\n",
-  "iast": "Full IAST transliteration with line breaks using \\n",
-  "hindi": "Complete Hindi translation (2-4 sentences, faithful to Gita Press style)",
-  "english": "Complete English translation (2-4 sentences)",
-  "wordByWord": [
-    {"word": "Sanskrit word", "iast": "IAST", "hindi": "Hindi meaning", "english": "English meaning"}
-  ],
-  "explanation": "Detailed explanation in Hindi (300-500 words, Gita Press Gorakhpur style, use \\n\\n for paragraphs, use **bold** for key terms). Include the philosophical context, connection to surrounding verses, and what the commentators say.",
-  "gitaPressNote": "Specific Gita Press (Gorakhpur) commentary note in Hindi, referencing Swami Ramsukhdas ji if applicable (100-150 words)",
-  "modernRelevance": "Modern day application and relevance in Hindi (150-200 words) — practical examples from daily life, work, relationships",
-  "themes": ["Theme1", "Theme2", "Theme3"]
-}
-
-Be authentic, scholarly, and faithful to the original meaning. The Sanskrit must be accurate. Themes should be in English.`;
-          const message = await anthropic.messages.create({
-            model: "claude-sonnet-4-5",
+          const prompt = VERSE_GENERATION_PROMPT(chapterId, verseId, chapter.name, chapter.skt);
+          const response = await openai.chat.completions.create({
+            model: "gpt-4o",
             max_tokens: 4096,
             messages: [{ role: "user", content: prompt }],
           });
-          const rawText = message.content[0]?.type === "text" ? message.content[0].text : "{}";
+          const rawText = response.choices[0]?.message?.content ?? "{}";
           const jsonText = rawText.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
           const verseData = JSON.parse(jsonText);
           const fullData = { id: verseId, chapterId, chapterName: chapter.name, ...verseData };
@@ -372,13 +337,13 @@ Provide a detailed explanation in BOTH Hindi and English. Respond ONLY with vali
   ]
 }`;
 
-    const message = await anthropic.messages.create({
-      model: "claude-sonnet-4-5",
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
       max_tokens: 2048,
       messages: [{ role: "user", content: prompt }],
     });
 
-    const rawText = message.content[0]?.type === "text" ? message.content[0].text : "{}";
+    const rawText = response.choices[0]?.message?.content ?? "{}";
     const jsonText = rawText
       .replace(/^```(?:json)?\s*/i, "")
       .replace(/\s*```$/i, "")

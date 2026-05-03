@@ -1,4 +1,67 @@
 User-agent: *
 Allow: /
+Disallow: /api/
+
+# Google Search
+User-agent: Googlebot
+Allow: /
+
+# Google Image Search
+User-agent: Googlebot-Image
+Allow: /
+
+# Bing
+User-agent: Bingbot
+Allow: /
+
+# DuckDuckGo
+User-agent: DuckDuckBot
+Allow: /
+
+# Yandex
+User-agent: YandexBot
+Allow: /
+
+# Baidu
+User-agent: Baiduspider
+Allow: /
+
+# Apple
+User-agent: Applebot
+Allow: /
+
+# OpenAI / ChatGPT
+User-agent: GPTBot
+Allow: /
+
+# Google Gemini / Bard
+User-agent: Google-Extended
+Allow: /
+
+# Anthropic / Claude
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: Claude-Web
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Common Crawl (used by many AI training datasets)
+User-agent: CCBot
+Allow: /
+
+# Meta AI
+User-agent: FacebookBot
+Allow: /
+
+# Amazon Alexa
+User-agent: ia_archiver
+Allow: /
 
 Sitemap: https://askgita.net/sitemap.xml

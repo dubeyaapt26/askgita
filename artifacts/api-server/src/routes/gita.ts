@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { anthropic } from "@workspace/integrations-anthropic-ai";
+import { openai } from "@workspace/integrations-openai-ai-server";
 
 const router = Router();
 
@@ -42,18 +42,20 @@ router.post("/gita/ask", async (req, res) => {
   }
 
   try {
-    const message = await anthropic.messages.create({
-      model: "claude-haiku-4-5",
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
       max_tokens: 1024,
-      system: GITA_SYSTEM,
-      messages: [{ role: "user", content: question }],
+      messages: [
+        { role: "system", content: GITA_SYSTEM },
+        { role: "user", content: question },
+      ],
     });
 
-    const full = message.content[0]?.type === "text" ? message.content[0].text : "";
+    const full = response.choices[0]?.message?.content ?? "";
     const result = parseGitaResponse(full);
     res.json(result);
   } catch (err) {
-    req.log.error({ err }, "Error calling Anthropic API");
+    req.log.error({ err }, "Error calling OpenAI API");
     res.status(500).json({ error: "Failed to get Gita wisdom" });
   }
 });
@@ -71,18 +73,20 @@ router.post("/gita/chat", async (req, res) => {
       content: String(m.content),
     }));
 
-    const message = await anthropic.messages.create({
-      model: "claude-haiku-4-5",
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
       max_tokens: 1024,
-      system: GITA_SYSTEM,
-      messages: safeMessages,
+      messages: [
+        { role: "system", content: GITA_SYSTEM },
+        ...safeMessages,
+      ],
     });
 
-    const full = message.content[0]?.type === "text" ? message.content[0].text : "";
+    const full = response.choices[0]?.message?.content ?? "";
     const result = parseGitaResponse(full);
     res.json(result);
   } catch (err) {
-    req.log.error({ err }, "Error calling Anthropic API");
+    req.log.error({ err }, "Error calling OpenAI API");
     res.status(500).json({ error: "Failed to get Gita wisdom" });
   }
 });
@@ -114,14 +118,16 @@ router.post("/gita/topic-wisdom", async (req, res) => {
   try {
     const userPrompt = `Topic: ${topic}\nHindi subtitle: ${topicHindi || ""}\nDescription: ${description || ""}\n\nPlease provide comprehensive Gita wisdom on this topic.`;
 
-    const message = await anthropic.messages.create({
-      model: "claude-haiku-4-5",
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
       max_tokens: 2000,
-      system: GITA_TOPIC_SYSTEM,
-      messages: [{ role: "user", content: userPrompt }],
+      messages: [
+        { role: "system", content: GITA_TOPIC_SYSTEM },
+        { role: "user", content: userPrompt },
+      ],
     });
 
-    const raw = message.content[0]?.type === "text" ? message.content[0].text : "{}";
+    const raw = response.choices[0]?.message?.content ?? "{}";
     const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
 
     let parsed: Record<string, unknown>;
@@ -175,14 +181,16 @@ router.post("/gita/chat/v2", async (req, res) => {
       content: String(m.content),
     }));
 
-    const message = await anthropic.messages.create({
-      model: "claude-haiku-4-5",
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
       max_tokens: 1800,
-      system: GITA_V2_SYSTEM,
-      messages: safeMessages,
+      messages: [
+        { role: "system", content: GITA_V2_SYSTEM },
+        ...safeMessages,
+      ],
     });
 
-    const raw = message.content[0]?.type === "text" ? message.content[0].text : "{}";
+    const raw = response.choices[0]?.message?.content ?? "{}";
     const cleaned = raw.replace(/^```(?:json)?\s*/i, "").replace(/\s*```$/i, "").trim();
 
     let parsed: Record<string, unknown>;
