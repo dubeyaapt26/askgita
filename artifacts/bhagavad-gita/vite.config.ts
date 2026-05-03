@@ -38,6 +38,41 @@ export default defineConfig({
   build: {
     outDir: path.resolve(import.meta.dirname, "dist/public"),
     emptyOutDir: true,
+    chunkSizeWarningLimit: 1000,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          // Split out large Gita data files so app logic stays small
+          if (id.includes("/src/data/ch/")) return "data-chapters";
+          if (id.includes("/src/data/verses")) return "data-verses";
+          if (id.includes("/src/data/topics")) return "data-topics";
+          if (id.includes("/src/data/")) return "data-misc";
+
+          if (!id.includes("node_modules")) return;
+          if (id.includes("/react-dom/") || id.includes("/react/")) {
+            return "vendor-react";
+          }
+          if (id.includes("/@radix-ui/")) {
+            return "vendor-radix";
+          }
+          if (id.includes("/@tanstack/")) {
+            return "vendor-query";
+          }
+          if (id.includes("/wouter/")) {
+            return "vendor-router";
+          }
+          if (
+            id.includes("/react-helmet-async/") ||
+            id.includes("/react-markdown/") ||
+            id.includes("/remark-") ||
+            id.includes("/rehype-")
+          ) {
+            return "vendor-content";
+          }
+          return "vendor-misc";
+        },
+      },
+    },
   },
   server: {
     port,
