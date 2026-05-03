@@ -285,11 +285,19 @@ function BilingualWisdomSection({ topic }: { topic: { title: string; subtitle: s
           <div className="mt-8 flex items-center gap-4">
             <div className="h-px flex-1 bg-gold/20" />
             <p className="text-xs font-cinzel uppercase tracking-widest text-text-muted whitespace-nowrap">
-              ↓ {topic.title.replace("Gita Verses on ", "").replace("Gita Verses for ", "")} — Selected Shlokas
+              ↓ {topicShort} — Selected Shlokas
             </p>
             <div className="h-px flex-1 bg-gold/20" />
           </div>
         )}
+
+        {/* Static noscript fallback — ensures Google indexes content even without JS */}
+        <noscript>
+          <div className="mt-6 p-6 bg-parchment/50 rounded-2xl border border-gold/15">
+            <p className="font-serif text-text-dark text-base leading-relaxed">{topic.description}</p>
+            <p className="font-devanagari text-saffron text-base mt-4 leading-loose">{topic.subtitle}</p>
+          </div>
+        </noscript>
       </div>
     </section>
   );
@@ -316,6 +324,16 @@ export default function TopicPage() {
     .map((s) => TOPICS.find((t) => t.slug === s)!)
     .filter(Boolean);
 
+  const topicShortForSchema = topic.title
+    .replace(/^Bhagavad Gita Verses (on|for|about|Explaining|After)\s*/i, "")
+    .replace(/^Gita Verses (on|for|about|Explaining|After)\s*/i, "")
+    .split("—")[0]
+    .trim();
+
+  const verseListText = topic.verses
+    .map((v) => `Bhagavad Gita ${v.chapterId}.${v.verseId}`)
+    .join(", ");
+
   const verseJsonLd = [
     {
       "@context": "https://schema.org",
@@ -330,13 +348,88 @@ export default function TopicPage() {
       "@context": "https://schema.org",
       "@type": "Article",
       headline: topic.title,
-      description: topic.description,
+      description: `${topic.description} Read ${topic.verses.length} carefully selected Bhagavad Gita shlokas in Sanskrit, Hindi and English.`,
       url: `${DOMAIN}/topics/${topic.slug}`,
-      author: { "@type": "Person", name: "Aapt Dubey" },
-      publisher: { "@type": "Organization", name: "AskGita.net", url: DOMAIN },
+      mainEntityOfPage: { "@type": "WebPage", "@id": `${DOMAIN}/topics/${topic.slug}` },
+      datePublished: "2025-05-01T00:00:00+05:30",
+      dateModified: "2025-05-03T00:00:00+05:30",
+      author: {
+        "@type": "Person",
+        name: "Aapt Dubey",
+        url: DOMAIN,
+      },
+      publisher: {
+        "@type": "Organization",
+        name: "AskGita.net",
+        url: DOMAIN,
+        logo: {
+          "@type": "ImageObject",
+          url: `${DOMAIN}/favicon.svg`,
+          width: 512,
+          height: 512,
+        },
+      },
+      image: {
+        "@type": "ImageObject",
+        url: `${DOMAIN}/opengraph.jpg`,
+        width: 1200,
+        height: 630,
+      },
       inLanguage: ["en", "hi", "sa"],
-      about: { "@type": "Thing", name: "Bhagavad Gita" },
-      keywords: `${topic.title}, bhagavad gita, gita shlokas, ${topic.slug.replace(/-/g, " ")}`,
+      isPartOf: { "@type": "Book", name: "Bhagavad Gita", url: DOMAIN },
+      about: [
+        { "@type": "Thing", name: "Bhagavad Gita" },
+        { "@type": "Thing", name: topicShortForSchema },
+      ],
+      mentions: topic.verses.map((v) => ({
+        "@type": "CreativeWork",
+        name: `Bhagavad Gita ${v.chapterId}.${v.verseId}`,
+        url: `${DOMAIN}/chapter/${v.chapterId}/verse/${v.verseId}`,
+      })),
+      keywords: `${topic.title}, bhagavad gita verses on ${topicShortForSchema.toLowerCase()}, gita shlokas on ${topicShortForSchema.toLowerCase()}, ${topic.subtitle}, bhagavad gita in hindi, gita updesh`,
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "FAQPage",
+      mainEntity: [
+        {
+          "@type": "Question",
+          name: `What does the Bhagavad Gita say about ${topicShortForSchema}?`,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: `${topic.description} The Bhagavad Gita addresses ${topicShortForSchema} through the teachings of Lord Krishna — known as ${topic.subtitle}. This topic includes ${topic.verses.length} key shlokas from the Gita.`,
+          },
+        },
+        {
+          "@type": "Question",
+          name: `Which Bhagavad Gita shlokas are about ${topicShortForSchema}?`,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: `The key Bhagavad Gita shlokas (verses) on ${topicShortForSchema} are: ${verseListText}. These shlokas provide Lord Krishna's direct guidance on this topic in Sanskrit, Hindi and English — curated at AskGita.net.`,
+          },
+        },
+        {
+          "@type": "Question",
+          name: `How can Bhagavad Gita teachings help with ${topicShortForSchema}?`,
+          acceptedAnswer: {
+            "@type": "Answer",
+            text: `Lord Krishna's teachings in the Bhagavad Gita help with ${topicShortForSchema} through the principle of ${topic.subtitle}. The Gita teaches us to perform our duties without attachment to results (Karma Yoga), find equanimity in all circumstances, and recognise the eternal nature of the soul — all of which apply directly to ${topicShortForSchema}.`,
+          },
+        },
+      ],
+    },
+    {
+      "@context": "https://schema.org",
+      "@type": "ItemList",
+      name: `Bhagavad Gita Shlokas on ${topicShortForSchema}`,
+      description: topic.description,
+      numberOfItems: topic.verses.length,
+      itemListElement: topic.verses.map((v, i) => ({
+        "@type": "ListItem",
+        position: i + 1,
+        url: `${DOMAIN}/chapter/${v.chapterId}/verse/${v.verseId}`,
+        name: `Bhagavad Gita ${v.chapterId}.${v.verseId}`,
+      })),
     },
   ];
 

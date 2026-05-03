@@ -23,17 +23,33 @@ This is a pnpm monorepo with the following structure:
 - **`lib/integrations-anthropic-ai/`** — Anthropic Claude AI client (uses Replit AI integration)
 
 ### Key Pages
-- **`Home.tsx`** — Hero with Om symbol, AI oracle search box (useAskGita), Sacred Shlokas section, FloatingChatbot
-- **`ChapterPage.tsx`** — Chapter detail with setting, themes, verse list (useGetChapter)
-- **`VersePage.tsx`** — Full verse with Sanskrit lines + per-line "Explain This Line" buttons (useGetVerse, useExplainVerseLine), Hindi/English/IAST, word-by-word breakdown
+- **`Home.tsx`** — Hero, bilingual AI oracle search, Sacred Shlokas, FloatingChatbot. Schema: WebSite + SearchAction + Book
+- **`ChapterPage.tsx`** — Chapter detail, verse list. Schema: BreadcrumbList + Article (with hasPart for first 10 verses)
+- **`VersePage.tsx`** — Full verse with Sanskrit/Hindi/English/IAST, per-line "Explain This Line". Schema: BreadcrumbList + Article. Has "appears in topic collections" internal links section.
+- **`TopicsListPage.tsx`** — 107 topics in 8 categories. Schema: BreadcrumbList + CollectionPage + ItemList (all 107)
+- **`TopicPage.tsx`** — Individual topic with BilingualWisdomSection (AI article in English+Hindi), verse pills, verse cards, related topics. Schema: BreadcrumbList + Article + FAQPage + ItemList (verse list)
 
 ### Key Features
 1. **All 18 chapters / 700+ verses** — Key verses as static data, rest AI-generated on demand
-2. **AI Oracle** — Ask any life question, get wisdom grounded in Gita philosophy with verse citation
-3. **Floating Chatbot** — Multi-turn conversation in English, Hindi, or Sanskrit (rendered in Home.tsx)
-4. **Verse Detail Pages** — Sanskrit, transliteration, Hindi/English translations, word-by-word breakdown
-5. **Per-Line Explanations** — Click "Explain This Line" on any Sanskrit line for AI commentary
-6. **DB Caching** — AI-generated verse explanations cached in `verse_cache` table
+2. **107 Topic Pages** — Curated shlokas for every life situation, each with bilingual AI wisdom article
+3. **AI Oracle** — Bilingual search (English + Hindi), verse reference cards, off-topic refusal
+4. **Floating Chatbot** — Multi-turn conversation in English, Hindi, or Sanskrit
+5. **Verse Detail Pages** — Sanskrit, transliteration, Hindi/English translations, word-by-word breakdown
+6. **Per-Line Explanations** — Click "Explain This Line" on any Sanskrit line for AI commentary
+7. **DB Caching** — AI-generated verse explanations cached in `verse_cache` table
+8. **Internal Linking** — Verse pages link to topic collections; topic pages link to verses + related topics
+
+### SEO Architecture
+- **Sitemap**: `public/sitemap.xml` — 830 URLs (home + 18 chapters + 700 verses + 107 topics + utility pages). All 107 topics with `priority=0.85`, `changefreq=weekly`.
+- **Robots.txt**: Allows all bots (Google, Bing, GPTBot, Claude, Perplexity, etc.), blocks `/api/`
+- **Schema types used**:
+  - Homepage: `WebSite` + `SearchAction` (sitelinks search box) + `Book` (Bhagavad Gita) + `WebPage`
+  - Topic pages: `BreadcrumbList` + `Article` (with image, author, publisher, datePublished, dateModified, mainEntityOfPage, mentions) + `FAQPage` (3 Qs) + `ItemList` (verse list)
+  - Topics list: `BreadcrumbList` + `CollectionPage` + `ItemList` (all 107 topics)
+  - Chapter pages: `BreadcrumbList` + `Article` (with hasPart verse list) + `isPartOf: Book`
+  - Verse pages: `BreadcrumbList` + `Article` (full metadata) + `isPartOf: Book`
+- **Noscript fallback**: Topic wisdom section has `<noscript>` fallback with static description + Hindi subtitle for crawlers
+- **AI content indexability**: Google CAN render JS. Static hero content (title, subtitle, description, verse pills) is available immediately. AI wisdom loads async but is in the DOM after JS runs.
 
 ## Environment Variables
 - `DATABASE_URL` — PostgreSQL connection (auto-provisioned)

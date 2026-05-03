@@ -4,6 +4,7 @@ import { useGetVerse, useExplainVerseLine } from "@workspace/api-client-react";
 import { ArrowLeft, ArrowRight, Sparkles, BookOpen, ChevronDown, ChevronUp } from "lucide-react";
 import { SEOHead } from "@/components/SEOHead";
 import { Footer } from "@/components/Footer";
+import { TOPICS } from "@/data/topics";
 
 function renderFormattedText(text: string) {
   return text.split('\n\n').map((paragraph, i) => {
@@ -118,10 +119,7 @@ export default function VersePage() {
     return () => clearInterval(t);
   }, [cId, vId]);
 
-  const { data: verse, isLoading, error } = useGetVerse(cId, vId, {
-    staleTime: 1000 * 60 * 60 * 24,
-    retry: 1,
-  });
+  const { data: verse, isLoading, error } = useGetVerse(cId, vId);
 
   React.useEffect(() => {
     if (!verse) return;
@@ -173,6 +171,7 @@ export default function VersePage() {
   const iastLines = verse.iast.split('\n');
 
   const domain = "https://askgita.net";
+  const verseUrl = `${domain}/chapter/${verse.chapterId}/verse/${verse.id}`;
   const verseJsonLd = [
     {
       "@context": "https://schema.org",
@@ -180,18 +179,30 @@ export default function VersePage() {
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": domain },
         { "@type": "ListItem", "position": 2, "name": `Chapter ${verse.chapterId}: ${verse.chapterName}`, "item": `${domain}/chapter/${verse.chapterId}` },
-        { "@type": "ListItem", "position": 3, "name": `Verse ${verse.id}`, "item": `${domain}/chapter/${verse.chapterId}/verse/${verse.id}` },
+        { "@type": "ListItem", "position": 3, "name": `Verse ${verse.id}`, "item": verseUrl },
       ],
     },
     {
       "@context": "https://schema.org",
       "@type": "Article",
-      "headline": `Bhagavad Gita ${verse.chapterId}.${verse.id} — Chapter ${verse.chapterId} Verse ${verse.id}`,
-      "description": verse.english,
-      "url": `${domain}/chapter/${verse.chapterId}/verse/${verse.id}`,
+      "headline": `Bhagavad Gita ${verse.chapterId}.${verse.id} — Chapter ${verse.chapterId} Verse ${verse.id} in Sanskrit, Hindi & English`,
+      "description": `Bhagavad Gita ${verse.chapterId}.${verse.id}: ${verse.english} — Read in Sanskrit, Hindi and English with word-by-word analysis.`,
+      "url": verseUrl,
+      "mainEntityOfPage": { "@type": "WebPage", "@id": verseUrl },
+      "datePublished": "2025-05-01T00:00:00+05:30",
+      "dateModified": "2025-05-03T00:00:00+05:30",
+      "author": { "@type": "Person", "name": "Aapt Dubey", "url": domain },
+      "publisher": {
+        "@type": "Organization",
+        "name": "AskGita.net",
+        "url": domain,
+        "logo": { "@type": "ImageObject", "url": `${domain}/favicon.svg`, "width": 512, "height": 512 },
+      },
+      "image": { "@type": "ImageObject", "url": `${domain}/opengraph.jpg`, "width": 1200, "height": 630 },
       "inLanguage": ["en", "hi", "sa"],
-      "keywords": verse.themes?.join(", "),
+      "keywords": `bhagavad gita ${verse.chapterId}.${verse.id}, gita shlok ${verse.chapterId} ${verse.id}, ${verse.themes?.join(", ").toLowerCase() ?? ""}`,
       "isPartOf": { "@type": "Book", "name": "Bhagavad Gita", "url": domain },
+      "about": { "@type": "Book", "name": "Bhagavad Gita", "url": domain },
     },
   ];
 
@@ -399,6 +410,46 @@ export default function VersePage() {
           </div>
         </div>
       </section>
+
+      {/* Topic Collections this verse appears in — internal linking */}
+      {(() => {
+        const relatedTopics = TOPICS.filter((t) =>
+          t.verses.some((v) => v.chapterId === verse.chapterId && v.verseId === verse.id)
+        );
+        if (relatedTopics.length === 0) return null;
+        return (
+          <section className="py-10 px-4 bg-parchment border-y border-gold/20">
+            <div className="max-w-6xl mx-auto">
+              <div className="flex items-center gap-4 mb-5">
+                <div className="h-px flex-1 bg-gold/20" />
+                <p className="text-xs font-cinzel uppercase tracking-widest text-text-muted whitespace-nowrap">
+                  This verse appears in {relatedTopics.length} topic collection{relatedTopics.length > 1 ? "s" : ""}
+                </p>
+                <div className="h-px flex-1 bg-gold/20" />
+              </div>
+              <div className="flex flex-wrap gap-3">
+                {relatedTopics.map((t) => (
+                  <Link
+                    key={t.slug}
+                    href={`/topics/${t.slug}`}
+                    className="inline-flex items-center gap-2 bg-white border border-gold/25 hover:border-saffron hover:shadow-md rounded-full px-4 py-2 transition-all group"
+                  >
+                    <span className="text-base">{t.icon}</span>
+                    <span className="font-cinzel text-xs text-dark-brown group-hover:text-saffron transition-colors leading-snug">
+                      {t.title
+                        .replace(/^Bhagavad Gita Verses (on|for|about)\s*/i, "")
+                        .replace(/^Gita Verses (on|for|about)\s*/i, "")
+                        .split("—")[0]
+                        .trim()}
+                    </span>
+                    <span className="text-gold text-xs font-cinzel">→</span>
+                  </Link>
+                ))}
+              </div>
+            </div>
+          </section>
+        );
+      })()}
 
       {/* Prev / Next */}
       <div className="bg-dark-brown sticky bottom-0 z-40 border-t border-medium-brown shadow-[0_-10px_30px_rgba(0,0,0,0.3)]">

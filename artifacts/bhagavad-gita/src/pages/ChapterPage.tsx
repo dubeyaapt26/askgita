@@ -45,23 +45,44 @@ export default function ChapterPage() {
   });
 
   const domain = "https://askgita.net";
+  const chapterUrl = `${domain}/chapter/${chapter.id}`;
   const chapterJsonLd = [
     {
       "@context": "https://schema.org",
       "@type": "BreadcrumbList",
       "itemListElement": [
         { "@type": "ListItem", "position": 1, "name": "Home", "item": domain },
-        { "@type": "ListItem", "position": 2, "name": `Chapter ${chapter.id}: ${chapter.name}`, "item": `${domain}/chapter/${chapter.id}` },
+        { "@type": "ListItem", "position": 2, "name": "Bhagavad Gita Chapters", "item": domain },
+        { "@type": "ListItem", "position": 3, "name": `Chapter ${chapter.id}: ${chapter.name}`, "item": chapterUrl },
       ],
     },
     {
       "@context": "https://schema.org",
       "@type": "Article",
       "headline": `Bhagavad Gita Chapter ${chapter.id}: ${chapter.name} — ${chapter.meaning}`,
-      "description": chapter.summary,
-      "url": `${domain}/chapter/${chapter.id}`,
+      "description": `${chapter.summary} Read all ${chapter.totalVerses} shlokas of Chapter ${chapter.id} (${chapter.skt}) in Sanskrit, Hindi and English.`,
+      "url": chapterUrl,
+      "mainEntityOfPage": { "@type": "WebPage", "@id": chapterUrl },
+      "datePublished": "2025-05-01T00:00:00+05:30",
+      "dateModified": "2025-05-03T00:00:00+05:30",
+      "author": { "@type": "Person", "name": "Aapt Dubey", "url": domain },
+      "publisher": {
+        "@type": "Organization",
+        "name": "AskGita.net",
+        "url": domain,
+        "logo": { "@type": "ImageObject", "url": `${domain}/favicon.svg`, "width": 512, "height": 512 },
+      },
+      "image": { "@type": "ImageObject", "url": `${domain}/opengraph.jpg`, "width": 1200, "height": 630 },
       "inLanguage": ["en", "hi", "sa"],
+      "keywords": `bhagavad gita chapter ${chapter.id}, ${chapter.name.toLowerCase()}, ${chapter.skt}, gita adhyay ${chapter.id}, bhagavad gita in hindi chapter ${chapter.id}`,
       "isPartOf": { "@type": "Book", "name": "Bhagavad Gita", "url": domain },
+      "about": { "@type": "Book", "name": "Bhagavad Gita", "url": domain },
+      "hasPart": chapter.verses.slice(0, 10).map((v) => ({
+        "@type": "Article",
+        "headline": `Bhagavad Gita ${chapter.id}.${v.id}`,
+        "url": `${domain}/chapter/${chapter.id}/verse/${v.id}`,
+        "description": v.english,
+      })),
     },
   ];
 
