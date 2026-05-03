@@ -1,9 +1,26 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation } from "wouter";
-import { useAskGita } from "@workspace/api-client-react";
 import { FloatingChatbot } from "@/components/FloatingChatbot";
 import { SEOHead } from "@/components/SEOHead";
 import { Footer } from "@/components/Footer";
+
+const BASE_URL = import.meta.env.BASE_URL ?? "/";
+
+interface VerseRef {
+  chapterId: number;
+  verseId: number;
+  skt: string;
+  ref: string;
+}
+
+interface SearchResult {
+  english: string;
+  hindi: string;
+  verses: VerseRef[];
+  refused?: boolean;
+  message?: string;
+  messageHindi?: string;
+}
 
 const CHAPTERS = [
   {n:1,name:"Arjuna's Dilemma",skt:"अर्जुनविषादयोग",meaning:"Yoga of Arjuna's Dejection",v:47},
