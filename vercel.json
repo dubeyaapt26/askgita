@@ -5,7 +5,7 @@
   "buildCommand": "NODE_ENV=production BASE_PATH=/ PORT=3000 pnpm --filter @workspace/bhagavad-gita run build",
   "outputDirectory": "artifacts/bhagavad-gita/dist/public",
   "functions": {
-    "api/index.ts": {
+    "api/index.js": {
       "maxDuration": 30
     }
   },
