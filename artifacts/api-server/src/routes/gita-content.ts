@@ -177,8 +177,8 @@ router.get("/gita/chapters/:chapterId/verses/:verseId", async (req, res) => {
     const prompt = VERSE_GENERATION_PROMPT(chapterId, verseId, chapter.name, chapter.skt);
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      max_tokens: 4096,
+      model: "gpt-5.4",
+      max_completion_tokens: 8192,
       messages: [{ role: "user", content: prompt }],
     });
 
@@ -244,8 +244,8 @@ router.post("/gita/verses/prewarm", async (req, res) => {
     try {
       const prompt = VERSE_GENERATION_PROMPT(chapterId, verseId, chapter.name, chapter.skt);
       const response = await openai.chat.completions.create({
-        model: "gpt-4o",
-        max_tokens: 4096,
+        model: "gpt-5.4",
+        max_completion_tokens: 8192,
         messages: [{ role: "user", content: prompt }],
       });
       const rawText = response.choices[0]?.message?.content ?? "{}";
@@ -286,8 +286,8 @@ router.post("/gita/admin/seed-all", async (req, res) => {
           if (!chapter) return;
           const prompt = VERSE_GENERATION_PROMPT(chapterId, verseId, chapter.name, chapter.skt);
           const response = await openai.chat.completions.create({
-            model: "gpt-4o",
-            max_tokens: 4096,
+            model: "gpt-5.4",
+            max_completion_tokens: 8192,
             messages: [{ role: "user", content: prompt }],
           });
           const rawText = response.choices[0]?.message?.content ?? "{}";
@@ -338,8 +338,8 @@ Provide a detailed explanation in BOTH Hindi and English. Respond ONLY with vali
 }`;
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      max_tokens: 2048,
+      model: "gpt-5.4",
+      max_completion_tokens: 8192,
       messages: [{ role: "user", content: prompt }],
     });
 

@@ -20,7 +20,7 @@ This is a pnpm monorepo with the following structure:
 - **`lib/api-client-react/`** — Generated React Query hooks (from openapi.yaml). Do not edit `src/generated/` manually.
 - **`lib/api-zod/`** — Generated Zod schemas. `src/index.ts` exports only from `./generated/api` (single-mode output).
 - **`lib/db/`** — Drizzle ORM + PostgreSQL (`verse_cache` table for AI-generated verse data)
-- **`lib/integrations-anthropic-ai/`** — Anthropic Claude AI client (uses Replit AI integration)
+- **`lib/integrations-openai-ai-server/`** — Replit AI integration (OpenAI-compatible proxy). Exports `openai` client, batch helpers, image helpers. No API key needed — auto-provisioned by Replit.
 
 ### Key Pages
 - **`Home.tsx`** — Hero, bilingual AI oracle search, Sacred Shlokas, FloatingChatbot. Schema: WebSite + SearchAction + Book
@@ -51,10 +51,16 @@ This is a pnpm monorepo with the following structure:
 - **Noscript fallback**: Topic wisdom section has `<noscript>` fallback with static description + Hindi subtitle for crawlers
 - **AI content indexability**: Google CAN render JS. Static hero content (title, subtitle, description, verse pills) is available immediately. AI wisdom loads async but is in the DOM after JS runs.
 
+## AI Models
+All AI calls go through Replit's OpenAI proxy (`@workspace/integrations-openai-ai-server`). No external API key required — billed to Replit credits.
+- **Chat / Oracle / Topic Wisdom** — `gpt-5-mini` (fast, cost-effective, high quality)
+- **Verse generation / Line explanation** — `gpt-5.4` (most capable, best for scholarly Sanskrit content)
+- All calls use `max_completion_tokens: 8192`
+
 ## Environment Variables
 - `DATABASE_URL` — PostgreSQL connection (auto-provisioned)
-- `AI_INTEGRATIONS_ANTHROPIC_BASE_URL` — Anthropic AI proxy URL (auto-provisioned)
-- `AI_INTEGRATIONS_ANTHROPIC_API_KEY` — Anthropic API key (auto-provisioned)
+- `AI_INTEGRATIONS_OPENAI_BASE_URL` — Replit OpenAI proxy URL (auto-provisioned)
+- `AI_INTEGRATIONS_OPENAI_API_KEY` — Replit proxy key (auto-provisioned, dummy value for SDK compat)
 
 ## Development
 - Frontend: auto-runs via workflow `artifacts/bhagavad-gita: web`

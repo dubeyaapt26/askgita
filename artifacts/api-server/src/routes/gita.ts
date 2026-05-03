@@ -43,8 +43,8 @@ router.post("/gita/ask", async (req, res) => {
 
   try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      max_tokens: 1024,
+      model: "gpt-5-mini",
+      max_completion_tokens: 8192,
       messages: [
         { role: "system", content: GITA_SYSTEM },
         { role: "user", content: question },
@@ -74,8 +74,8 @@ router.post("/gita/chat", async (req, res) => {
     }));
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      max_tokens: 1024,
+      model: "gpt-5-mini",
+      max_completion_tokens: 8192,
       messages: [
         { role: "system", content: GITA_SYSTEM },
         ...safeMessages,
@@ -119,8 +119,8 @@ router.post("/gita/topic-wisdom", async (req, res) => {
     const userPrompt = `Topic: ${topic}\nHindi subtitle: ${topicHindi || ""}\nDescription: ${description || ""}\n\nPlease provide comprehensive Gita wisdom on this topic.`;
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      max_tokens: 2000,
+      model: "gpt-5-mini",
+      max_completion_tokens: 8192,
       messages: [
         { role: "system", content: GITA_TOPIC_SYSTEM },
         { role: "user", content: userPrompt },
@@ -182,8 +182,8 @@ router.post("/gita/chat/v2", async (req, res) => {
     }));
 
     const response = await openai.chat.completions.create({
-      model: "gpt-4o-mini",
-      max_tokens: 1800,
+      model: "gpt-5-mini",
+      max_completion_tokens: 8192,
       messages: [
         { role: "system", content: GITA_V2_SYSTEM },
         ...safeMessages,
