@@ -1,11 +1,18 @@
+import { useState, useEffect } from "react";
 import { useParams, Link } from "wouter";
 import { SEOHead } from "@/components/SEOHead";
 import { Footer } from "@/components/Footer";
 import { TOPICS, TOPIC_BY_SLUG, type Topic } from "@/data/topics";
 import { getStaticVerse, type StaticVerse } from "@/data/verses";
-import { BookOpen, ChevronRight, ExternalLink } from "lucide-react";
+import { BookOpen, ChevronRight, ExternalLink, Sparkles } from "lucide-react";
 
 const DOMAIN = "https://askgita.net";
+const BASE_URL = import.meta.env.BASE_URL ?? "/";
+
+interface TopicWisdom {
+  english: string;
+  hindi: string;
+}
 
 function VerseCard({ verse, verseNum }: { verse: StaticVerse; verseNum: number }) {
   const sktLines = verse.skt.split("\n");
@@ -144,6 +151,149 @@ function RelatedTopicCard({ topic }: { topic: Topic }) {
   );
 }
 
+function WisdomSkeleton() {
+  return (
+    <div className="animate-pulse space-y-4">
+      <div className="h-4 bg-gold/15 rounded-full w-3/4" />
+      <div className="h-4 bg-gold/10 rounded-full w-full" />
+      <div className="h-4 bg-gold/10 rounded-full w-5/6" />
+      <div className="h-4 bg-gold/10 rounded-full w-full" />
+      <div className="h-4 bg-gold/10 rounded-full w-4/5" />
+      <div className="h-px bg-gold/20 my-6" />
+      <div className="h-4 bg-saffron/10 rounded-full w-3/4" />
+      <div className="h-4 bg-saffron/8 rounded-full w-full" />
+      <div className="h-4 bg-saffron/8 rounded-full w-5/6" />
+      <div className="h-4 bg-saffron/8 rounded-full w-full" />
+    </div>
+  );
+}
+
+function BilingualWisdomSection({ topic }: { topic: { title: string; subtitle: string; description: string; slug: string } }) {
+  const [wisdom, setWisdom] = useState<TopicWisdom | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
+
+  useEffect(() => {
+    setWisdom(null);
+    setLoading(true);
+    setError(false);
+
+    const url = `${BASE_URL}api/gita/topic-wisdom`.replace(/\/+/g, "/").replace(":/", "://");
+
+    fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        topic: topic.title,
+        topicHindi: topic.subtitle,
+        description: topic.description,
+      }),
+    })
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.english && data.hindi) {
+          setWisdom(data as TopicWisdom);
+        } else {
+          setError(true);
+        }
+      })
+      .catch(() => setError(true))
+      .finally(() => setLoading(false));
+  }, [topic.slug]);
+
+  const topicShort = topic.title
+    .replace("Gita Verses on ", "")
+    .replace("Gita Verses for ", "")
+    .replace("Gita Verses about ", "");
+
+  return (
+    <section className="py-10 px-4 bg-white border-b border-gold/20">
+      <div className="max-w-4xl mx-auto">
+        {/* Section header */}
+        <div className="flex items-center gap-3 mb-6">
+          <div className="flex items-center justify-center w-9 h-9 rounded-full bg-gradient-to-br from-saffron/20 to-gold/10 border border-gold/30 flex-shrink-0">
+            <Sparkles className="w-4 h-4 text-saffron" />
+          </div>
+          <div>
+            <h2 className="font-cinzel text-dark-brown text-xl font-semibold leading-tight">
+              What the Bhagavad Gita Says About {topicShort}
+            </h2>
+            <p className="font-devanagari text-saffron/70 text-sm mt-0.5">{topic.subtitle} — गीता का संदेश</p>
+          </div>
+        </div>
+
+        {loading && (
+          <div className="bg-parchment/50 rounded-2xl border border-gold/15 p-6 md:p-8">
+            <WisdomSkeleton />
+            <p className="text-center text-xs font-cinzel text-text-muted mt-6 uppercase tracking-widest">
+              ✦ Loading Gita's wisdom… ✦
+            </p>
+          </div>
+        )}
+
+        {error && !loading && (
+          <div className="bg-parchment/30 rounded-2xl border border-gold/15 p-6 text-center">
+            <p className="font-devanagari text-saffron text-lg mb-2">श्रीमद्भगवद्गीता की जय</p>
+            <p className="text-text-medium font-serif text-sm">{topic.description}</p>
+          </div>
+        )}
+
+        {wisdom && !loading && (
+          <div className="rounded-2xl border border-gold/20 overflow-hidden shadow-sm">
+            {/* English */}
+            <div className="p-6 md:p-8 bg-white">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="w-5 h-5 rounded-full bg-saffron/15 border border-saffron/30 flex items-center justify-center text-xs font-bold text-saffron">E</span>
+                <span className="font-cinzel text-xs uppercase tracking-widest text-text-muted">English — Gita's Wisdom</span>
+              </div>
+              <p className="text-text-dark font-serif text-base md:text-lg leading-relaxed">
+                {wisdom.english}
+              </p>
+            </div>
+
+            {/* Divider */}
+            <div className="flex items-center gap-4 px-6 md:px-8">
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+              <span className="text-gold text-lg">✦</span>
+              <div className="h-px flex-1 bg-gradient-to-r from-transparent via-gold/30 to-transparent" />
+            </div>
+
+            {/* Hindi */}
+            <div className="p-6 md:p-8 bg-gradient-to-br from-[#FDF8F0] to-[#F9F3E8]">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="w-5 h-5 rounded-full bg-saffron/15 border border-saffron/30 flex items-center justify-center text-xs font-bold text-saffron">ह</span>
+                <span className="font-cinzel text-xs uppercase tracking-widest text-text-muted">हिंदी — गीता का संदेश</span>
+              </div>
+              <p className="font-devanagari text-text-dark text-base md:text-lg leading-loose">
+                {wisdom.hindi}
+              </p>
+            </div>
+
+            {/* Footer tag */}
+            <div className="px-6 py-3 bg-dark-brown/5 border-t border-gold/10 flex items-center justify-between">
+              <span className="text-xs font-cinzel text-text-muted uppercase tracking-widest">
+                ✦ Gita Wisdom by AskGita.net
+              </span>
+              <span className="font-devanagari text-saffron/60 text-xs">श्रीमद्भगवद्गीता</span>
+            </div>
+          </div>
+        )}
+
+        {/* Transition line into shlokas */}
+        {!loading && (
+          <div className="mt-8 flex items-center gap-4">
+            <div className="h-px flex-1 bg-gold/20" />
+            <p className="text-xs font-cinzel uppercase tracking-widest text-text-muted whitespace-nowrap">
+              ↓ {topic.title.replace("Gita Verses on ", "").replace("Gita Verses for ", "")} — Selected Shlokas
+            </p>
+            <div className="h-px flex-1 bg-gold/20" />
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
 export default function TopicPage() {
   const { slug } = useParams<{ slug: string }>();
   const topic = TOPIC_BY_SLUG.get(slug || "");
@@ -246,26 +396,14 @@ export default function TopicPage() {
         </div>
       </section>
 
-      {/* Introduction */}
-      <section className="py-8 px-4 bg-parchment border-b border-gold/20">
+      {/* Quick verse reference pills */}
+      <section className="py-6 px-4 bg-parchment border-b border-gold/20">
         <div className="max-w-4xl mx-auto">
-          <div className="flex items-center gap-4 text-sm font-cinzel text-text-medium">
-            <BookOpen className="w-4 h-4 text-gold flex-shrink-0" />
-            <p>
-              Below are{" "}
-              <strong className="text-dark-brown">{topic.verses.length} selected shlokas</strong> from the
-              Bhagavad Gita on the theme of{" "}
-              <em>
-                {topic.title
-                  .replace("Gita Verses on ", "")
-                  .replace("Gita Verses for ", "")}
-              </em>
-              . Each verse is presented in Sanskrit (Devanagari), with Hindi translation and English explanation.
-            </p>
-          </div>
-
-          {/* Verse reference pills — immediately visible to search engines */}
-          <div className="mt-5 flex flex-wrap gap-2" aria-label="Verse references in this collection">
+          <p className="text-xs font-cinzel uppercase tracking-widest text-text-muted mb-3 flex items-center gap-2">
+            <BookOpen className="w-3 h-3 text-gold" />
+            {topic.verses.length} shlokas in this collection
+          </p>
+          <div className="flex flex-wrap gap-2" aria-label="Verse references in this collection">
             {topic.verses.map((v, i) => (
               <Link
                 key={i}
@@ -281,7 +419,10 @@ export default function TopicPage() {
         </div>
       </section>
 
-      {/* Verse Cards — all static, no API */}
+      {/* ★ BILINGUAL WISDOM ARTICLE — appears before shloka cards ★ */}
+      <BilingualWisdomSection topic={topic} />
+
+      {/* Shloka Verse Cards */}
       <main className="py-12 px-4">
         <div className="max-w-4xl mx-auto space-y-8">
           {topic.verses.map((ref, i) => {
