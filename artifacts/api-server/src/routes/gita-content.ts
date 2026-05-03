@@ -3,8 +3,8 @@ import { eq, and } from "drizzle-orm";
 import { db } from "@workspace/db";
 import { verseCache } from "@workspace/db/schema";
 import { openai } from "@workspace/integrations-openai-ai-server";
-import { CHAPTERS } from "../data/chapters";
-import { getKeyVerse } from "../data/key-verses";
+import { CHAPTERS } from "../data/chapters.js";
+import { getKeyVerse } from "../data/key-verses.js";
 
 const router = Router();
 

@@ -1,7 +1,7 @@
 import { Router, type IRouter } from "express";
-import healthRouter from "./health";
-import gitaRouter from "./gita";
-import gitaContentRouter from "./gita-content";
+import healthRouter from "./health.js";
+import gitaRouter from "./gita.js";
+import gitaContentRouter from "./gita-content.js";
 
 const router: IRouter = Router();
 
