@@ -58,9 +58,25 @@ All AI calls go through Replit's OpenAI proxy (`@workspace/integrations-openai-a
 - All calls use `max_completion_tokens: 8192`
 
 ## Environment Variables
-- `DATABASE_URL` — PostgreSQL connection (auto-provisioned)
-- `AI_INTEGRATIONS_OPENAI_BASE_URL` — Replit OpenAI proxy URL (auto-provisioned)
-- `AI_INTEGRATIONS_OPENAI_API_KEY` — Replit proxy key (auto-provisioned, dummy value for SDK compat)
+- `DATABASE_URL` — PostgreSQL connection (auto-provisioned on Replit)
+- `AI_INTEGRATIONS_OPENAI_BASE_URL` — Replit OpenAI proxy URL (auto-provisioned on Replit; set to `https://api.openai.com/v1` on Vercel)
+- `AI_INTEGRATIONS_OPENAI_API_KEY` — Replit proxy key (auto-provisioned on Replit; use real OpenAI key on Vercel)
+- `VITE_API_BASE_URL` — (optional) Absolute URL to external API server. Leave unset on Replit (co-located); set on Vercel to the deployed Express API URL (e.g., `https://api.askgita.net`).
+
+## Vercel Deployment
+The project is Vercel-ready. `vercel.json` at the repo root configures:
+- **Build**: `pnpm --filter @workspace/bhagavad-gita build` → output to `artifacts/bhagavad-gita/dist/public`
+- **API**: `api/index.ts` Vercel serverless function wrapping the Express app → handles all `/api/*` routes
+- **SPA routing**: all other routes rewrite to `index.html`
+
+**Vercel env vars to set in dashboard:**
+```
+DATABASE_URL=<neon/supabase/postgres URL>
+AI_INTEGRATIONS_OPENAI_BASE_URL=https://api.openai.com/v1
+AI_INTEGRATIONS_OPENAI_API_KEY=<real OpenAI key>
+SESSION_SECRET=<random 32+ char string>
+```
+See `.env.example` for full reference.
 
 ## Development
 - Frontend: auto-runs via workflow `artifacts/bhagavad-gita: web`

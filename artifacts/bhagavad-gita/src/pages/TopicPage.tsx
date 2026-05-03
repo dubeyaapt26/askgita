@@ -5,9 +5,9 @@ import { Footer } from "@/components/Footer";
 import { TOPICS, TOPIC_BY_SLUG, type Topic } from "@/data/topics";
 import { getStaticVerse, type StaticVerse } from "@/data/verses";
 import { BookOpen, ChevronRight, ExternalLink, Sparkles } from "lucide-react";
+import { getApiUrl } from "@/lib/api-url";
 
 const DOMAIN = "https://askgita.net";
-const BASE_URL = import.meta.env.BASE_URL ?? "/";
 
 interface TopicWisdom {
   english: string;
@@ -178,7 +178,7 @@ function BilingualWisdomSection({ topic }: { topic: { title: string; subtitle: s
     setLoading(true);
     setError(false);
 
-    const url = `${BASE_URL}api/gita/topic-wisdom`.replace(/\/+/g, "/").replace(":/", "://");
+    const url = getApiUrl("/api/gita/topic-wisdom");
 
     fetch(url, {
       method: "POST",

@@ -4,7 +4,7 @@ import { FloatingChatbot } from "@/components/FloatingChatbot";
 import { SEOHead } from "@/components/SEOHead";
 import { Footer } from "@/components/Footer";
 
-const BASE_URL = import.meta.env.BASE_URL ?? "/";
+import { getApiUrl } from "@/lib/api-url";
 
 interface VerseRef {
   chapterId: number;
@@ -107,7 +107,7 @@ export default function Home() {
       document.getElementById("oracle-answer")?.scrollIntoView({ behavior: "smooth" });
     }, 100);
     try {
-      const res = await fetch(`${BASE_URL}api/gita/chat/v2`, {
+      const res = await fetch(getApiUrl("/api/gita/chat/v2"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ messages: [{ role: "user", content: q }] }),

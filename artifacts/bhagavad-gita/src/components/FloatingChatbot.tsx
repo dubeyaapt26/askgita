@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Link } from "wouter";
+import { getApiUrl } from "@/lib/api-url";
 
 interface VerseRef {
   chapterId: number;
@@ -19,10 +20,8 @@ interface GitaMessage {
   refusedMsgHindi?: string;
 }
 
-const BASE_URL = import.meta.env.BASE_URL ?? "/";
-
 async function askGitaV2(messages: Array<{ role: string; content: string }>) {
-  const res = await fetch(`${BASE_URL}api/gita/chat/v2`, {
+  const res = await fetch(getApiUrl("/api/gita/chat/v2"), {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ messages }),
