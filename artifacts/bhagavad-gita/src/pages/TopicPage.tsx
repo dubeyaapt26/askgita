@@ -365,16 +365,25 @@ export default function TopicPage() {
         logo: {
           "@type": "ImageObject",
           url: `${DOMAIN}/favicon.svg`,
+          contentUrl: `${DOMAIN}/favicon.svg`,
           width: 512,
           height: 512,
+          name: "AskGita.net Logo",
+          alt: "AskGita.net — Bhagavad Gita",
         },
       },
       image: {
         "@type": "ImageObject",
         url: `${DOMAIN}/opengraph.jpg`,
-        width: 1200,
-        height: 630,
+        contentUrl: `${DOMAIN}/opengraph.jpg`,
+        width: 1280,
+        height: 720,
+        name: `${topic.title} — Bhagavad Gita | AskGita.net`,
+        description: topic.description,
+        caption: `Bhagavad Gita shlokas on ${topicShortForSchema} — Sanskrit, Hindi & English | AskGita.net`,
+        alt: `${topic.title} — Bhagavad Gita shlokas in Sanskrit, Hindi and English | AskGita.net`,
       },
+      articleBody: `${topic.description} This collection includes ${topic.verses.length} carefully selected Bhagavad Gita shlokas on ${topicShortForSchema} (${topic.subtitle}): ${verseListText}. Each shloka is presented in Sanskrit with Hindi and English translations. Lord Krishna's teachings in the Bhagavad Gita offer profound guidance on ${topicShortForSchema} through the principles of karma yoga, detachment, and self-knowledge. Curated by Aapt Dubey at AskGita.net.`,
       inLanguage: ["en", "hi", "sa"],
       isPartOf: { "@type": "Book", name: "Bhagavad Gita", url: DOMAIN },
       about: [
@@ -439,6 +448,7 @@ export default function TopicPage() {
         title={`${topic.title} — ${topic.verses.length} Bhagavad Gita Shlokas`}
         description={`${topic.description} Read ${topic.verses.length} carefully selected Bhagavad Gita shlokas on this topic in Sanskrit, Hindi and English. Curated by Aapt Dubey at AskGita.net.`}
         canonical={`/topics/${topic.slug}`}
+        ogImageAlt={`${topic.title} — Bhagavad Gita shlokas on ${topicShortForSchema} in Sanskrit, Hindi and English | AskGita.net`}
         keywords={`${topic.title.toLowerCase()}, bhagavad gita verses on ${topic.slug
           .replace(/gita-verses-on-|gita-verses-for-/g, "")
           .replace(/-/g, " ")}, gita shlokas, ${topic.subtitle}`}

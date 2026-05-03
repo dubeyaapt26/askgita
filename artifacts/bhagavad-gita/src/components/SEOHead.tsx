@@ -5,6 +5,7 @@ interface SEOHeadProps {
   description: string;
   canonical?: string;
   ogImage?: string;
+  ogImageAlt?: string;
   keywords?: string;
   jsonLd?: object | object[];
   type?: "website" | "article";
@@ -20,6 +21,7 @@ export function SEOHead({
   description,
   canonical,
   ogImage,
+  ogImageAlt,
   keywords,
   jsonLd,
   type = "website",
@@ -28,6 +30,7 @@ export function SEOHead({
   const fullTitle = title.includes("Bhagavad Gita") ? title : `${title} | Bhagavad Gita`;
   const canonicalUrl = canonical ? `${DOMAIN}${canonical}` : DOMAIN;
   const image = ogImage || DEFAULT_IMAGE;
+  const imageAlt = ogImageAlt || `${fullTitle} — Sacred Bhagavad Gita Wisdom | AskGita.net`;
 
   const schemas = jsonLd ? (Array.isArray(jsonLd) ? jsonLd : [jsonLd]) : [];
 
@@ -51,8 +54,10 @@ export function SEOHead({
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={image} />
-      <meta property="og:image:width" content="1200" />
-      <meta property="og:image:height" content="630" />
+      <meta property="og:image:alt" content={imageAlt} />
+      <meta property="og:image:type" content="image/jpeg" />
+      <meta property="og:image:width" content="1280" />
+      <meta property="og:image:height" content="720" />
       <meta property="og:url" content={canonicalUrl} />
       <meta property="og:type" content={type} />
       <meta property="og:locale" content="en_IN" />
@@ -62,6 +67,7 @@ export function SEOHead({
       <meta name="twitter:title" content={fullTitle} />
       <meta name="twitter:description" content={description} />
       <meta name="twitter:image" content={image} />
+      <meta name="twitter:image:alt" content={imageAlt} />
 
       {schemas.map((schema, i) => (
         <script key={i} type="application/ld+json">

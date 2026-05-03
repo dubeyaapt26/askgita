@@ -5,6 +5,18 @@ import { TOPICS, FEATURED_TOPIC_SLUGS } from "@/data/topics";
 
 const DOMAIN = "https://askgita.net";
 
+const OG_IMAGE = {
+  "@type": "ImageObject",
+  "url": `${DOMAIN}/opengraph.jpg`,
+  "contentUrl": `${DOMAIN}/opengraph.jpg`,
+  "width": 1280,
+  "height": 720,
+  "name": "Bhagavad Gita Verses by Topic — AskGita.net",
+  "description": "107 curated Bhagavad Gita topic pages covering anxiety, karma, duty, love, depression, loneliness, meditation and moksha.",
+  "caption": "Bhagavad Gita — 107 Life Topics with Sanskrit Shlokas | AskGita.net",
+  "alt": "Bhagavad Gita Verses by Topic — AskGita.net",
+};
+
 const topicsJsonLd = [
   {
     "@context": "https://schema.org",
@@ -24,11 +36,25 @@ const topicsJsonLd = [
     "datePublished": "2025-05-01T00:00:00+05:30",
     "dateModified": "2025-05-03T00:00:00+05:30",
     "author": { "@type": "Person", "name": "Aapt Dubey", "url": DOMAIN },
-    "publisher": { "@type": "Organization", "name": "AskGita.net", "url": DOMAIN },
-    "image": { "@type": "ImageObject", "url": `${DOMAIN}/opengraph.jpg`, "width": 1200, "height": 630 },
+    "publisher": {
+      "@type": "Organization",
+      "name": "AskGita.net",
+      "url": DOMAIN,
+      "logo": {
+        "@type": "ImageObject",
+        "url": `${DOMAIN}/favicon.svg`,
+        "contentUrl": `${DOMAIN}/favicon.svg`,
+        "width": 512,
+        "height": 512,
+        "name": "AskGita.net Logo",
+        "alt": "AskGita.net — Bhagavad Gita",
+      },
+    },
+    "image": OG_IMAGE,
     "isPartOf": { "@type": "WebSite", "name": "AskGita.net", "url": DOMAIN },
     "about": { "@type": "Book", "name": "Bhagavad Gita", "url": DOMAIN },
     "numberOfItems": TOPICS.length,
+    "articleBody": "AskGita.net presents 107 curated Bhagavad Gita topic collections — each covering a specific life situation with hand-picked Sanskrit shlokas, Hindi and English translations, and a bilingual AI wisdom article. Topics include anxiety, karma yoga, duty, love, depression, loneliness, burnout, heartbreak, marriage, meditation, moksha, self-confidence, forgiveness and more. Curated by Aapt Dubey.",
   },
   {
     "@context": "https://schema.org",
@@ -44,6 +70,106 @@ const topicsJsonLd = [
       "description": t.description,
       "url": `${DOMAIN}/topics/${t.slug}`,
     })),
+  },
+  {
+    "@context": "https://schema.org",
+    "@type": "ImageGallery",
+    "name": "Bhagavad Gita Topic Illustrations — AskGita.net",
+    "description": "Visual collection representing 107 Bhagavad Gita topic pages covering life situations from anxiety and karma to moksha and meditation.",
+    "url": `${DOMAIN}/topics`,
+    "author": { "@type": "Person", "name": "Aapt Dubey", "url": DOMAIN },
+    "publisher": { "@type": "Organization", "name": "AskGita.net", "url": DOMAIN },
+    "numberOfItems": 8,
+    "itemListElement": [
+      {
+        "@type": "ImageObject",
+        "url": `${DOMAIN}/opengraph.jpg`,
+        "contentUrl": `${DOMAIN}/opengraph.jpg`,
+        "name": "Mind & Emotions — Bhagavad Gita on Anxiety, Peace and Equanimity",
+        "description": "Bhagavad Gita verses on overcoming anxiety, finding peace of mind, managing anger, grief, equanimity and inner peace.",
+        "caption": "Bhagavad Gita — Mind & Emotions | AskGita.net",
+        "alt": "Bhagavad Gita verses on anxiety, peace of mind and equanimity — AskGita.net",
+        "width": 1280,
+        "height": 720,
+      },
+      {
+        "@type": "ImageObject",
+        "url": `${DOMAIN}/opengraph.jpg`,
+        "contentUrl": `${DOMAIN}/opengraph.jpg`,
+        "name": "Action & Purpose — Bhagavad Gita on Karma Yoga and Duty",
+        "description": "Bhagavad Gita verses on karma yoga, dharma, career, success, self-discipline, burnout and life purpose.",
+        "caption": "Bhagavad Gita — Action & Purpose | AskGita.net",
+        "alt": "Bhagavad Gita verses on karma yoga, duty and dharma — AskGita.net",
+        "width": 1280,
+        "height": 720,
+      },
+      {
+        "@type": "ImageObject",
+        "url": `${DOMAIN}/opengraph.jpg`,
+        "contentUrl": `${DOMAIN}/opengraph.jpg`,
+        "name": "Relationships — Bhagavad Gita on Love, Forgiveness and Compassion",
+        "description": "Bhagavad Gita verses on love, friendship, forgiveness, marriage, heartbreak and dealing with toxic relationships.",
+        "caption": "Bhagavad Gita — Relationships | AskGita.net",
+        "alt": "Bhagavad Gita verses on love, forgiveness and relationships — AskGita.net",
+        "width": 1280,
+        "height": 720,
+      },
+      {
+        "@type": "ImageObject",
+        "url": `${DOMAIN}/opengraph.jpg`,
+        "contentUrl": `${DOMAIN}/opengraph.jpg`,
+        "name": "Spirituality & Devotion — Bhagavad Gita on Bhakti, Meditation and Moksha",
+        "description": "Bhagavad Gita verses on bhakti yoga, meditation, mindfulness, moksha, spiritual growth and God's promises.",
+        "caption": "Bhagavad Gita — Spirituality & Devotion | AskGita.net",
+        "alt": "Bhagavad Gita verses on bhakti, meditation and moksha — AskGita.net",
+        "width": 1280,
+        "height": 720,
+      },
+      {
+        "@type": "ImageObject",
+        "url": `${DOMAIN}/opengraph.jpg`,
+        "contentUrl": `${DOMAIN}/opengraph.jpg`,
+        "name": "Strength & Growth — Bhagavad Gita on Self-Confidence and Resilience",
+        "description": "Bhagavad Gita verses on inner strength, self-confidence, focus, resilience, leadership and self-worth.",
+        "caption": "Bhagavad Gita — Strength & Growth | AskGita.net",
+        "alt": "Bhagavad Gita verses on strength, resilience and self-confidence — AskGita.net",
+        "width": 1280,
+        "height": 720,
+      },
+      {
+        "@type": "ImageObject",
+        "url": `${DOMAIN}/opengraph.jpg`,
+        "contentUrl": `${DOMAIN}/opengraph.jpg`,
+        "name": "Modern Life — Bhagavad Gita on Work-Life Balance and Stress",
+        "description": "Bhagavad Gita verses on work-life balance, social media, procrastination, time management and modern challenges.",
+        "caption": "Bhagavad Gita — Modern Life Challenges | AskGita.net",
+        "alt": "Bhagavad Gita verses on work-life balance and modern challenges — AskGita.net",
+        "width": 1280,
+        "height": 720,
+      },
+      {
+        "@type": "ImageObject",
+        "url": `${DOMAIN}/opengraph.jpg`,
+        "contentUrl": `${DOMAIN}/opengraph.jpg`,
+        "name": "Daily Motivation — Bhagavad Gita on Habits and Discipline",
+        "description": "Bhagavad Gita verses on daily motivation, morning discipline, building habits and overcoming laziness.",
+        "caption": "Bhagavad Gita — Daily Motivation | AskGita.net",
+        "alt": "Bhagavad Gita verses on daily motivation and habits — AskGita.net",
+        "width": 1280,
+        "height": 720,
+      },
+      {
+        "@type": "ImageObject",
+        "url": `${DOMAIN}/opengraph.jpg`,
+        "contentUrl": `${DOMAIN}/opengraph.jpg`,
+        "name": "Healing — Bhagavad Gita on Loneliness, Grief and Emotional Recovery",
+        "description": "Bhagavad Gita verses on healing from loneliness, self-forgiveness, grief, rejection and emotional recovery.",
+        "caption": "Bhagavad Gita — Healing & Recovery | AskGita.net",
+        "alt": "Bhagavad Gita verses on healing, loneliness and emotional recovery — AskGita.net",
+        "width": 1280,
+        "height": 720,
+      },
+    ],
   },
 ];
 
@@ -214,6 +340,7 @@ export default function TopicsListPage() {
         title="Bhagavad Gita Verses by Topic — 107 Life Situations with Shlokas"
         description="Browse 107 Bhagavad Gita topic pages: anxiety, karma, duty, love, depression, loneliness, burnout, heartbreak, marriage, fear, guilt, meditation, moksha and more. Each topic has curated shlokas in Sanskrit, Hindi and English — AskGita.net."
         canonical="/topics"
+        ogImageAlt="Bhagavad Gita Verses by Topic — 107 life situations with Sanskrit shlokas in Hindi and English | AskGita.net"
         keywords="bhagavad gita topics, gita verses by topic, gita on anxiety, gita on karma, gita on duty, gita shlokas by topic, gita on loneliness, gita on meditation, gita on moksha, askgita, aapt dubey"
         jsonLd={topicsJsonLd}
       />

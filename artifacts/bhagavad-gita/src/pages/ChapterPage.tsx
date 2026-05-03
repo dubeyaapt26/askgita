@@ -70,9 +70,28 @@ export default function ChapterPage() {
         "@type": "Organization",
         "name": "AskGita.net",
         "url": domain,
-        "logo": { "@type": "ImageObject", "url": `${domain}/favicon.svg`, "width": 512, "height": 512 },
+        "logo": {
+          "@type": "ImageObject",
+          "url": `${domain}/favicon.svg`,
+          "contentUrl": `${domain}/favicon.svg`,
+          "width": 512,
+          "height": 512,
+          "name": "AskGita.net Logo",
+          "alt": "AskGita.net — Bhagavad Gita",
+        },
       },
-      "image": { "@type": "ImageObject", "url": `${domain}/opengraph.jpg`, "width": 1200, "height": 630 },
+      "image": {
+        "@type": "ImageObject",
+        "url": `${domain}/opengraph.jpg`,
+        "contentUrl": `${domain}/opengraph.jpg`,
+        "width": 1280,
+        "height": 720,
+        "name": `Bhagavad Gita Chapter ${chapter.id}: ${chapter.name} — ${chapter.meaning} | AskGita.net`,
+        "description": chapter.summary,
+        "caption": `Bhagavad Gita Chapter ${chapter.id} — ${chapter.totalVerses} Shlokas in Sanskrit, Hindi & English | AskGita.net`,
+        "alt": `Bhagavad Gita Chapter ${chapter.id} ${chapter.name} (${chapter.skt}) — ${chapter.totalVerses} shlokas | AskGita.net`,
+      },
+      "articleBody": `Bhagavad Gita Chapter ${chapter.id}: ${chapter.name} (${chapter.skt}) — ${chapter.meaning}. ${chapter.summary} ${chapter.longSummary ?? ""} This chapter contains ${chapter.totalVerses} shlokas presented in Sanskrit, Hindi and English with word-by-word analysis and AI commentary. Curated at AskGita.net by Aapt Dubey.`,
       "inLanguage": ["en", "hi", "sa"],
       "keywords": `bhagavad gita chapter ${chapter.id}, ${chapter.name.toLowerCase()}, ${chapter.skt}, gita adhyay ${chapter.id}, bhagavad gita in hindi chapter ${chapter.id}`,
       "isPartOf": { "@type": "Book", "name": "Bhagavad Gita", "url": domain },
@@ -92,6 +111,7 @@ export default function ChapterPage() {
         title={`Bhagavad Gita Chapter ${chapter.id}: ${chapter.name} — ${chapter.meaning} | ${chapter.totalVerses} Shlokas`}
         description={`Read Bhagavad Gita Chapter ${chapter.id} (${chapter.skt}) — ${chapter.name}. ${chapter.summary} All ${chapter.totalVerses} verses in Sanskrit, Hindi and English.`}
         canonical={`/chapter/${chapter.id}`}
+        ogImageAlt={`Bhagavad Gita Chapter ${chapter.id} ${chapter.name} (${chapter.skt}) — ${chapter.totalVerses} shlokas in Sanskrit, Hindi & English | AskGita.net`}
         keywords={`bhagavad gita chapter ${chapter.id}, ${chapter.name.toLowerCase()}, ${chapter.skt}, gita adhyay ${chapter.id}, bhagavad gita in hindi chapter ${chapter.id}`}
         jsonLd={chapterJsonLd}
         type="article"
