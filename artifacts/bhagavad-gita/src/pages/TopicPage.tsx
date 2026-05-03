@@ -202,9 +202,10 @@ function BilingualWisdomSection({ topic }: { topic: { title: string; subtitle: s
   }, [topic.slug]);
 
   const topicShort = topic.title
-    .replace("Gita Verses on ", "")
-    .replace("Gita Verses for ", "")
-    .replace("Gita Verses about ", "");
+    .replace(/^Bhagavad Gita Verses (on|for|about|Explaining|After)\s*/i, "")
+    .replace(/^Gita Verses (on|for|about|Explaining|After)\s*/i, "")
+    .split("—")[0]
+    .trim();
 
   return (
     <section className="py-10 px-4 bg-white border-b border-gold/20">

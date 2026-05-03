@@ -1,0 +1,246 @@
+	# ==================== NEW 15 HIGH-TRAFFIC TOPICS (Add these now) ====================
+    "gita-verses-on-loneliness": {
+        "title": "Gita Verses on Dealing with Loneliness and Feeling Alone",
+        "shlokas": [(6, 30), (9, 34), (18, 66), (12, 13), (5, 29), (6, 9)]
+	},
+    "gita-verses-on-work-life-balance": {
+        "title": "Gita Verses on Work-Life Balance and Avoiding Burnout",
+        "shlokas": [(2, 48), (3, 19), (5, 21), (6, 16), (18, 66)]
+	},
+    "gita-verses-on-office-politics": {
+        "title": "Gita Verses on Dealing with Office Politics and Toxic Colleagues",
+        "shlokas": [(12, 13), (16, 1), (6, 9), (2, 56), (16, 2)]
+	},
+    "gita-verses-on-imposter-syndrome": {
+        "title": "Gita Verses on Imposter Syndrome and Self-Doubt",
+        "shlokas": [(6, 5), (2, 3), (18, 58), (2, 14), (13, 8)]
+	},
+    "gita-verses-on-dealing-with-betrayal": {
+        "title": "Gita Verses on Dealing with Betrayal and Broken Trust",
+        "shlokas": [(12, 13), (2, 56), (16, 1), (6, 9), (18, 66)]
+	},
+    "gita-verses-on-overcoming-bad-habits": {
+        "title": "Gita Verses on Overcoming Bad Habits and Addictions",
+        "shlokas": [(6, 35), (5, 23), (2, 59), (6, 25), (5, 26)]
+	},
+    "gita-verses-on-stage-fear": {
+        "title": "Gita Verses on Public Speaking Fear and Stage Fright",
+        "shlokas": [(2, 3), (6, 5), (18, 58), (2, 14), (11, 33)]
+	},
+    "gita-verses-on-entrepreneurship": {
+        "title": "Gita Verses for Entrepreneurs and Risk Taking",
+        "shlokas": [(2, 47), (3, 19), (18, 58), (11, 33), (2, 48)]
+	},
+    "gita-verses-on-uncertainty": {
+        "title": "Gita Verses on Dealing with Change and Uncertainty",
+        "shlokas": [(2, 14), (2, 48), (5, 21), (18, 66), (2, 27)]
+	},
+    "gita-verses-on-daily-motivation": {
+        "title": "Gita Verses for Daily Motivation and Morning Inspiration",
+        "shlokas": [(2, 3), (11, 33), (18, 58), (2, 47), (3, 19)]
+	},
+    "gita-verses-on-dealing-with-criticism": {
+        "title": "Gita Verses on Handling Criticism from Family and Friends",
+        "shlokas": [(12, 13), (2, 56), (16, 2), (6, 9)]
+	},
+    "gita-verses-on-fear-of-death": {
+        "title": "Gita Verses on Fear of Death and Afterlife",
+        "shlokas": [(2, 27), (2, 13), (2, 22), (18, 66)]
+	},
+    "gita-verses-on-mindfulness": {
+        "title": "Gita Verses on Mindfulness and Living in the Present Moment",
+        "shlokas": [(5, 27), (6, 25), (2, 48), (6, 35)]
+	},
+    "gita-verses-on-gratitude-in-hard-times": {
+        "title": "Gita Verses on Gratitude Even in Difficult Times",
+        "shlokas": [(9, 34), (10, 10), (12, 13), (18, 66)]
+	},
+    "gita-verses-on-finding-inner-peace": {
+        "title": "Gita Verses on Finding Inner Peace in Chaos",
+        "shlokas": [(2, 66), (5, 29), (12, 15), (6, 35), (2, 48)]
+	}
+}
+	# ==================== NEW 30 HIGH-TRAFFIC TOPICS (Add these now) ====================
+    "gita-verses-on-procrastination": {
+        "title": "Gita Verses on Overcoming Procrastination and Laziness",
+        "shlokas": [(3, 8), (6, 16), (18, 39), (3, 19), (2, 47), (6, 5)]
+	},
+    "gita-verses-on-perfectionism": {
+        "title": "Gita Verses on Overcoming Perfectionism and Overthinking Results",
+        "shlokas": [(2, 47), (2, 48), (5, 21), (18, 66), (3, 19)]
+	},
+    "gita-verses-on-decision-fatigue": {
+        "title": "Gita Verses on Decision Fatigue and Confusing Choices",
+        "shlokas": [(2, 41), (2, 47), (3, 35), (18, 47), (2, 31)]
+	},
+    "gita-verses-on-exam-failure": {
+        "title": "Gita Verses After Exam Failure and Moving Forward",
+        "shlokas": [(2, 14), (2, 22), (2, 48), (18, 66), (2, 27)]
+	},
+    "gita-verses-on-peer-pressure": {
+        "title": "Gita Verses on Peer Pressure and Standing Firm",
+        "shlokas": [(2, 3), (6, 5), (16, 1), (2, 56), (18, 58)]
+	},
+    "gita-verses-on-sibling-rivalry": {
+        "title": "Gita Verses on Sibling Rivalry and Family Jealousy",
+        "shlokas": [(12, 13), (16, 1), (6, 9), (2, 56), (16, 2)]
+	},
+    "gita-verses-on-in-law-problems": {
+        "title": "Gita Verses for In-Law Issues and Family Harmony",
+        "shlokas": [(16, 1), (12, 13), (6, 9), (3, 35)]
+	},
+    "gita-verses-on-work-from-home": {
+        "title": "Gita Verses on Work-from-Home Challenges and Focus",
+        "shlokas": [(6, 35), (2, 48), (5, 27), (3, 19)]
+	},
+    "gita-verses-on-digital-detox": {
+        "title": "Gita Verses on Digital Detox and Reducing Screen Time",
+        "shlokas": [(6, 25), (5, 21), (2, 70), (6, 35)]
+	},
+    "gita-verses-on-comparison": {
+        "title": "Gita Verses on Comparison and Feeling Not Good Enough",
+        "shlokas": [(12, 13), (5, 21), (2, 70), (6, 5)]
+	},
+    "gita-verses-on-building-habits": {
+        "title": "Gita Verses on Building Good Habits and Discipline",
+        "shlokas": [(6, 5), (6, 35), (5, 23), (2, 59), (6, 25)]
+	},
+    "gita-verses-on-anger-towards-parents": {
+        "title": "Gita Verses on Anger Towards Parents and Family",
+        "shlokas": [(16, 1), (12, 13), (2, 56), (6, 9)]
+	},
+    "gita-verses-on-joy-in-small-things": {
+        "title": "Gita Verses on Finding Joy in Small Things",
+        "shlokas": [(5, 21), (2, 66), (14, 24), (9, 34)]
+	},
+    "gita-verses-on-financial-independence": {
+        "title": "Gita Verses on Financial Independence and Money Mindset",
+        "shlokas": [(2, 47), (5, 21), (2, 70), (16, 21)]
+	},
+    "gita-verses-on-narcissistic-people": {
+        "title": "Gita Verses on Dealing with Narcissistic People",
+        "shlokas": [(12, 13), (16, 1), (6, 9), (2, 56)]
+	},
+    "gita-verses-on-self-sabotage": {
+        "title": "Gita Verses on Overcoming Self-Sabotage",
+        "shlokas": [(6, 5), (2, 3), (18, 58), (2, 14)]
+	},
+    "gita-verses-on-morning-discipline": {
+        "title": "Gita Verses for Morning Discipline and Daily Routine",
+        "shlokas": [(6, 5), (3, 8), (6, 16), (2, 47)]
+	},
+    "gita-verses-on-handling-rejection": {
+        "title": "Gita Verses on Handling Rejection and No’s",
+        "shlokas": [(2, 14), (2, 48), (5, 21), (18, 66)]
+	},
+    "gita-verses-on-self-esteem": {
+        "title": "Gita Verses on Building Healthy Self-Esteem",
+        "shlokas": [(6, 5), (2, 17), (13, 8), (18, 66)]
+	},
+    "gita-verses-on-anxiety-attacks": {
+        "title": "Gita Verses for Anxiety Attacks and Panic Moments",
+        "shlokas": [(6, 35), (2, 48), (5, 29), (12, 15)]
+	},
+    "gita-verses-on-self-forgiveness": {
+        "title": "Gita Verses on Self-Forgiveness and Moving Past Mistakes",
+        "shlokas": [(4, 37), (18, 66), (2, 22), (5, 15)]
+	},
+    "gita-verses-on-no-expectations": {
+        "title": "Gita Verses on Living Without Expectations",
+        "shlokas": [(2, 47), (5, 21), (2, 48), (18, 66)]
+	},
+    "gita-verses-on-handling-success": {
+        "title": "Gita Verses on Handling Success Without Ego",
+        "shlokas": [(2, 48), (5, 20), (14, 24), (2, 56)]
+	},
+    "gita-verses-on-spiritual-growth": {
+        "title": "Gita Verses on Spiritual Growth in Daily Life",
+        "shlokas": [(9, 34), (12, 8), (18, 66), (10, 10)]
+	},
+    "gita-verses-on-fake-friends": {
+        "title": "Gita Verses on Dealing with Fake Friends",
+        "shlokas": [(6, 9), (12, 13), (16, 1), (2, 56)]
+	},
+    "gita-verses-on-time-management": {
+        "title": "Gita Verses on Time Management and Productivity",
+        "shlokas": [(3, 19), (2, 47), (6, 16), (3, 8)]
+	},
+    "gita-verses-on-spiritual-laziness": {
+        "title": "Gita Verses on Overcoming Spiritual Laziness",
+        "shlokas": [(3, 8), (6, 5), (18, 39), (2, 47)]
+	},
+    "gita-verses-on-life-balance": {
+        "title": "Gita Verses on Creating Balance in Life",
+        "shlokas": [(2, 48), (5, 21), (14, 24), (6, 35)]
+	},
+    "gita-verses-on-daily-gratitude": {
+        "title": "Gita Verses on Practicing Daily Gratitude",
+        "shlokas": [(9, 34), (10, 10), (12, 13), (18, 66)]
+	},
+    "gita-verses-on-crisis-calm": {
+        "title": "Gita Verses on Staying Calm During Crisis",
+        "shlokas": [(2, 14), (2, 48), (5, 21), (18, 66), (12, 15)]
+	}
+}
+	# ==================== FINAL 15 HIGH-TRAFFIC TOPICS ====================
+    "gita-verses-on-body-image": {
+        "title": "Gita Verses on Body Image and Self-Acceptance",
+        "shlokas": [(2, 13), (2, 22), (5, 21), (6, 5), (13, 8)]
+	},
+    "gita-verses-on-bullying": {
+        "title": "Gita Verses on Dealing with Bullies and Harassment",
+        "shlokas": [(12, 13), (16, 1), (2, 14), (6, 9), (2, 56)]
+	},
+    "gita-verses-on-single-life": {
+        "title": "Gita Verses for Happy Single Life and Contentment",
+        "shlokas": [(5, 21), (2, 48), (6, 35), (18, 66)]
+	},
+    "gita-verses-on-infertility": {
+        "title": "Gita Verses for Couples Facing Infertility or Childlessness",
+        "shlokas": [(2, 27), (2, 14), (18, 66), (5, 21)]
+	},
+    "gita-verses-on-aging": {
+        "title": "Gita Verses on Aging Gracefully and Old Age",
+        "shlokas": [(2, 13), (2, 22), (2, 27), (14, 24)]
+	},
+    "gita-verses-on-meditation": {
+        "title": "Gita Verses on Meditation Practice and Focus",
+        "shlokas": [(6, 35), (5, 27), (6, 25), (6, 5)]
+	},
+    "gita-verses-on-chanting": {
+        "title": "Gita Verses on Chanting and Mantra Practice",
+        "shlokas": [(9, 34), (10, 10), (12, 8), (18, 66)]
+	},
+    "gita-verses-on-women-empowerment": {
+        "title": "Gita Verses on Women’s Strength and Empowerment",
+        "shlokas": [(2, 3), (6, 5), (16, 1), (18, 58)]
+	},
+    "gita-verses-on-motherhood": {
+        "title": "Gita Verses for Mothers and Motherhood Challenges",
+        "shlokas": [(3, 35), (12, 13), (16, 1), (9, 34)]
+	},
+    "gita-verses-on-rejection": {
+        "title": "Gita Verses on Dealing with Rejection in Love or Career",
+        "shlokas": [(2, 14), (2, 48), (5, 21), (18, 66)]
+	},
+    "gita-verses-on-perfectionism": {
+        "title": "Gita Verses on Overcoming Perfectionism",
+        "shlokas": [(2, 47), (2, 48), (5, 21), (3, 19)]
+	},
+    "gita-verses-on-karma-explanation": {
+        "title": "Gita Verses Explaining Karma in Simple Words",
+        "shlokas": [(2, 47), (4, 17), (18, 23), (5, 11)]
+	},
+    "gita-verses-on-moksha": {
+        "title": "Gita Verses on Moksha (Liberation) and Ultimate Freedom",
+        "shlokas": [(18, 66), (5, 29), (2, 72), (12, 8)]
+	},
+    "gita-verses-on-environment": {
+        "title": "Gita Verses on Nature, Environment and Sustainability",
+        "shlokas": [(7, 10), (15, 14), (3, 14), (5, 29)]
+	},
+    "gita-verses-on-festivals": {
+        "title": "Gita Verses for Festivals and Special Occasions",
+        "shlokas": [(9, 34), (10, 10), (4, 8), (18, 66)]
+	}
+

@@ -17,8 +17,8 @@ const topicsJsonLd = [
   {
     "@context": "https://schema.org",
     "@type": "CollectionPage",
-    "name": "Bhagavad Gita Verses by Topic",
-    "description": "Browse all 48 Bhagavad Gita topic pages — verses on anxiety, karma, love, duty, depression, heartbreak, marriage, and more. Curated at AskGita.net.",
+    "name": "Bhagavad Gita Verses by Topic — 107 Life Situations",
+    "description": "Browse 107 Bhagavad Gita topic pages — shlokas on anxiety, karma, love, duty, depression, loneliness, burnout, heartbreak, marriage, meditation, moksha and more. Curated at AskGita.net.",
     "url": `${DOMAIN}/topics`,
     "isPartOf": { "@type": "WebSite", "name": "AskGita.net", "url": DOMAIN },
   },
@@ -29,45 +29,154 @@ const TOPIC_CATEGORIES = [
     name: "Mind & Emotions",
     icon: "🧠",
     slugs: [
-      "gita-verses-on-overcoming-anxiety","gita-verses-on-peace-of-mind","gita-verses-on-anger-management",
-      "gita-verses-on-grief-and-loss","gita-verses-on-equanimity","gita-verses-on-true-happiness",
-      "gita-verses-on-depression","gita-verses-on-fear","gita-verses-on-negative-thoughts","gita-verses-on-social-media",
+      "gita-verses-on-overcoming-anxiety",
+      "gita-verses-on-peace-of-mind",
+      "gita-verses-on-anger-management",
+      "gita-verses-on-grief-and-loss",
+      "gita-verses-on-equanimity",
+      "gita-verses-on-true-happiness",
+      "gita-verses-on-depression",
+      "gita-verses-on-fear",
+      "gita-verses-on-negative-thoughts",
+      "gita-verses-on-finding-inner-peace",
+      "gita-verses-on-anxiety-attacks",
+      "gita-verses-on-fear-of-death",
     ],
   },
   {
     name: "Action & Purpose",
     icon: "⚡",
     slugs: [
-      "gita-verses-on-karma-yoga","gita-verses-on-duty-and-dharma","gita-verses-on-career-and-purpose",
-      "gita-verses-on-success-without-stress","gita-verses-on-self-discipline","gita-verses-on-overcoming-laziness",
-      "gita-verses-on-burnout","gita-verses-on-life-purpose",
+      "gita-verses-on-karma-yoga",
+      "gita-verses-on-duty-and-dharma",
+      "gita-verses-on-career-and-purpose",
+      "gita-verses-on-success-without-stress",
+      "gita-verses-on-self-discipline",
+      "gita-verses-on-overcoming-laziness",
+      "gita-verses-on-burnout",
+      "gita-verses-on-life-purpose",
+      "gita-verses-on-entrepreneurship",
+      "gita-verses-on-karma-explanation",
+      "gita-verses-on-no-expectations",
     ],
   },
   {
     name: "Relationships",
     icon: "💛",
     slugs: [
-      "gita-verses-on-love-and-compassion","gita-verses-on-friendship","gita-verses-on-forgiveness",
-      "gita-verses-on-toxic-relationships","gita-verses-on-humility-and-ego","gita-verses-on-gratitude",
-      "gita-verses-on-marriage","gita-verses-on-heartbreak","gita-verses-on-parenting","gita-verses-on-criticism",
+      "gita-verses-on-love-and-compassion",
+      "gita-verses-on-friendship",
+      "gita-verses-on-forgiveness",
+      "gita-verses-on-toxic-relationships",
+      "gita-verses-on-humility-and-ego",
+      "gita-verses-on-gratitude",
+      "gita-verses-on-marriage",
+      "gita-verses-on-heartbreak",
+      "gita-verses-on-parenting",
+      "gita-verses-on-dealing-with-betrayal",
+      "gita-verses-on-fake-friends",
+      "gita-verses-on-sibling-rivalry",
+      "gita-verses-on-in-law-problems",
+      "gita-verses-on-anger-towards-parents",
+      "gita-verses-on-narcissistic-people",
     ],
   },
   {
     name: "Strength & Growth",
     icon: "🔱",
     slugs: [
-      "gita-verses-on-inner-strength","gita-verses-on-self-confidence","gita-verses-on-resilience",
-      "gita-verses-on-focus","gita-verses-for-students","gita-verses-on-leadership-and-decision-making",
-      "gita-verses-on-self-worth","gita-verses-on-self-love","gita-verses-on-mind-control","gita-verses-on-resilience-tough-times",
+      "gita-verses-on-inner-strength",
+      "gita-verses-on-self-confidence",
+      "gita-verses-on-resilience",
+      "gita-verses-on-focus",
+      "gita-verses-for-students",
+      "gita-verses-on-leadership-and-decision-making",
+      "gita-verses-on-self-worth",
+      "gita-verses-on-self-love",
+      "gita-verses-on-mind-control",
+      "gita-verses-on-resilience-tough-times",
+      "gita-verses-on-imposter-syndrome",
+      "gita-verses-on-self-sabotage",
+      "gita-verses-on-self-esteem",
+      "gita-verses-on-peer-pressure",
+      "gita-verses-on-women-empowerment",
     ],
   },
   {
-    name: "Spirituality & Healing",
+    name: "Spirituality & Devotion",
     icon: "🕉️",
     slugs: [
-      "gita-verses-on-bhakti","gita-verses-on-gods-promises","gita-verses-on-wisdom-and-knowledge",
-      "gita-verses-on-detachment","gita-verses-on-greed-and-contentment","gita-verses-on-encouragement",
-      "gita-verses-on-patience","gita-verses-on-guilt","gita-verses-on-financial-stress","gita-verses-on-jealousy",
+      "gita-verses-on-bhakti",
+      "gita-verses-on-gods-promises",
+      "gita-verses-on-wisdom-and-knowledge",
+      "gita-verses-on-detachment",
+      "gita-verses-on-encouragement",
+      "gita-verses-on-patience",
+      "gita-verses-on-guilt",
+      "gita-verses-on-meditation",
+      "gita-verses-on-mindfulness",
+      "gita-verses-on-chanting",
+      "gita-verses-on-moksha",
+      "gita-verses-on-spiritual-growth",
+      "gita-verses-on-spiritual-laziness",
+      "gita-verses-on-environment",
+      "gita-verses-on-festivals",
+    ],
+  },
+  {
+    name: "Modern Life Challenges",
+    icon: "🌐",
+    slugs: [
+      "gita-verses-on-social-media",
+      "gita-verses-on-work-life-balance",
+      "gita-verses-on-work-from-home",
+      "gita-verses-on-digital-detox",
+      "gita-verses-on-office-politics",
+      "gita-verses-on-procrastination",
+      "gita-verses-on-decision-fatigue",
+      "gita-verses-on-time-management",
+      "gita-verses-on-perfectionism",
+      "gita-verses-on-comparison",
+      "gita-verses-on-uncertainty",
+      "gita-verses-on-life-balance",
+      "gita-verses-on-crisis-calm",
+    ],
+  },
+  {
+    name: "Daily Motivation & Habits",
+    icon: "☀️",
+    slugs: [
+      "gita-verses-on-daily-motivation",
+      "gita-verses-on-morning-discipline",
+      "gita-verses-on-building-habits",
+      "gita-verses-on-overcoming-bad-habits",
+      "gita-verses-on-stage-fear",
+      "gita-verses-on-handling-success",
+      "gita-verses-on-handling-rejection",
+      "gita-verses-on-exam-failure",
+      "gita-verses-on-financial-independence",
+      "gita-verses-on-financial-stress",
+      "gita-verses-on-greed-and-contentment",
+    ],
+  },
+  {
+    name: "Healing & Emotional Recovery",
+    icon: "🌿",
+    slugs: [
+      "gita-verses-on-loneliness",
+      "gita-verses-on-self-forgiveness",
+      "gita-verses-on-body-image",
+      "gita-verses-on-bullying",
+      "gita-verses-on-single-life",
+      "gita-verses-on-infertility",
+      "gita-verses-on-aging",
+      "gita-verses-on-motherhood",
+      "gita-verses-on-rejection",
+      "gita-verses-on-dealing-with-criticism",
+      "gita-verses-on-joy-in-small-things",
+      "gita-verses-on-gratitude-in-hard-times",
+      "gita-verses-on-daily-gratitude",
+      "gita-verses-on-no-expectations",
     ],
   },
 ];
@@ -79,10 +188,10 @@ export default function TopicsListPage() {
   return (
     <div className="min-h-screen bg-cream font-sans text-text-dark">
       <SEOHead
-        title="Bhagavad Gita Verses by Topic — 48 Life Topics with Shlokas"
-        description="Browse 48 Bhagavad Gita topic pages: anxiety, karma, duty, love, depression, heartbreak, marriage, fear, guilt and more. Curated by Aapt Dubey at AskGita.net — each topic has 4–7 relevant shlokas in Sanskrit, Hindi and English."
+        title="Bhagavad Gita Verses by Topic — 107 Life Situations with Shlokas"
+        description="Browse 107 Bhagavad Gita topic pages: anxiety, karma, duty, love, depression, loneliness, burnout, heartbreak, marriage, fear, guilt, meditation, moksha and more. Each topic has curated shlokas in Sanskrit, Hindi and English — AskGita.net."
         canonical="/topics"
-        keywords="bhagavad gita topics, gita verses by topic, gita on anxiety, gita on karma, gita on duty, gita shlokas by topic, askgita, aapt dubey"
+        keywords="bhagavad gita topics, gita verses by topic, gita on anxiety, gita on karma, gita on duty, gita shlokas by topic, gita on loneliness, gita on meditation, gita on moksha, askgita, aapt dubey"
         jsonLd={topicsJsonLd}
       />
 
@@ -104,9 +213,14 @@ export default function TopicsListPage() {
             Bhagavad Gita<br />
             <span className="text-saffron">Verses by Topic</span>
           </h1>
-          <p className="text-parchment/70 font-serif text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-6">
-            48 topics from the Gita — curated shlokas for every life situation, from anxiety and heartbreak to leadership and devotion.
+          <p className="text-parchment/70 font-serif text-lg md:text-xl max-w-2xl mx-auto leading-relaxed mb-4">
+            107 life topics — curated shlokas for every situation, from anxiety and loneliness to moksha and meditation. Each topic includes a bilingual Gita wisdom article in English and Hindi.
           </p>
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
+            {["Anxiety","Karma","Loneliness","Meditation","Moksha","Heartbreak","Burnout","Purpose"].map(tag => (
+              <span key={tag} className="text-xs font-cinzel uppercase tracking-widest text-saffron/70 bg-saffron/10 border border-saffron/20 rounded-full px-3 py-1">{tag}</span>
+            ))}
+          </div>
           <p className="font-devanagari text-saffron text-lg">योगः कर्मसु कौशलम् — Excellence in action is Yoga</p>
           <p className="text-parchment/40 text-xs font-cinzel uppercase tracking-widest mt-2">Curated by Aapt Dubey · AskGita.net</p>
         </div>
@@ -132,7 +246,7 @@ export default function TopicsListPage() {
                   <div className="flex items-start gap-3 mb-3">
                     <span className="text-3xl">{topic.icon}</span>
                     <div>
-                      <h3 className="font-cinzel text-dark-brown font-semibold text-base leading-snug group-hover:text-saffron transition-colors">
+                      <h3 className="font-cinzel text-dark-brown font-semibold text-base leading-snug group-hover:text-saffron transition-colors line-clamp-2">
                         {topic.title}
                       </h3>
                       <p className="font-devanagari text-saffron/70 text-sm mt-0.5">{topic.subtitle}</p>
@@ -157,15 +271,16 @@ export default function TopicsListPage() {
         <div className="max-w-7xl mx-auto">
           <div className="flex items-center gap-4 mb-12">
             <div className="h-px flex-1 bg-gold/20" />
-            <h2 className="font-cinzel text-dark-brown text-2xl text-center tracking-wider">All 48 Topics</h2>
+            <h2 className="font-cinzel text-dark-brown text-2xl text-center tracking-wider">All 107 Topics</h2>
             <div className="h-px flex-1 bg-gold/20" />
           </div>
           <div className="space-y-14">
             {TOPIC_CATEGORIES.map((cat) => (
               <div key={cat.name}>
                 <h3 className="font-cinzel text-xl text-dark-brown mb-6 flex items-center gap-3">
-                  <span>{cat.icon}</span>
+                  <span className="text-2xl">{cat.icon}</span>
                   <span>{cat.name}</span>
+                  <span className="text-xs font-sans text-text-muted normal-case tracking-normal ml-1">({cat.slugs.filter(s => topicMap.has(s)).length})</span>
                   <span className="h-px flex-1 bg-gold/20" />
                 </h3>
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
